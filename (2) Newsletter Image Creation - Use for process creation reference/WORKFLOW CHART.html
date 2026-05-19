@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Newsletter Image Creation — Workflow</title>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: #f5f6fa;
+    color: #1a1a2e;
+    padding: 40px 24px;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a1a2e;
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    margin-top: 8px;
+    font-size: 14px;
+    color: #666;
+  }
+
+  /* Stage sections */
+  .stage {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    margin-bottom: 32px;
+    overflow: hidden;
+  }
+
+  .stage-header {
+    padding: 14px 24px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .stage-header h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #fff;
+    letter-spacing: 0.3px;
+  }
+
+  .stage-header .badge {
+    font-size: 11px;
+    font-weight: 600;
+    background: rgba(255,255,255,0.2);
+    color: #fff;
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+
+  .stage-header.s0 { background: #1a237e; }
+  .stage-header.s1 { background: #0d47a1; }
+  .stage-header.s2 { background: #1b5e20; }
+  .stage-header.s3 { background: #311b92; }
+
+  .stage-body {
+    padding: 24px;
+  }
+
+  /* Flow diagram */
+  .mermaid-wrap {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 32px 16px;
+    margin-bottom: 32px;
+    overflow-x: auto;
+  }
+
+  /* Decision tables */
+  .tables {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
+    margin-bottom: 32px;
+  }
+
+  .table-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    overflow: hidden;
+  }
+
+  .table-card h3 {
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    padding: 12px 16px;
+    color: #fff;
+  }
+
+  .table-card.t1 h3 { background: #0d47a1; }
+  .table-card.t2 h3 { background: #e65100; }
+  .table-card.t3 h3 { background: #311b92; }
+
+  .table-card table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .table-card td {
+    padding: 10px 16px;
+    font-size: 13px;
+    border-bottom: 1px solid #f0f0f0;
+    vertical-align: top;
+  }
+
+  .table-card tr:last-child td {
+    border-bottom: none;
+  }
+
+  .table-card td:first-child {
+    font-weight: 600;
+    width: 48%;
+    color: #333;
+  }
+
+  .table-card td:last-child {
+    color: #555;
+  }
+
+  /* Rule pills */
+  .rules {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 32px;
+  }
+
+  .rule-pill {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: #fff;
+    border-radius: 40px;
+    padding: 8px 16px;
+    box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+    font-size: 13px;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .rule-pill .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+
+  .dot-red    { background: #c62828; }
+  .dot-orange { background: #e65100; }
+  .dot-green  { background: #1b5e20; }
+  .dot-blue   { background: #0d47a1; }
+
+  /* Approval flow */
+  .approval-flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
+    padding: 20px 24px;
+    margin-bottom: 32px;
+  }
+
+  .af-step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 120px;
+    flex: 1;
+  }
+
+  .af-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .af-step p { font-size: 12px; font-weight: 600; color: #333; }
+  .af-step small { font-size: 11px; color: #888; margin-top: 2px; }
+
+  .af-arrow {
+    font-size: 22px;
+    color: #ccc;
+    padding: 0 4px;
+    flex-shrink: 0;
+    padding-bottom: 20px;
+  }
+
+  .af-icon.receive  { background: #e8eaf6; color: #3f51b5; }
+  .af-icon.build    { background: #e3f2fd; color: #1565c0; }
+  .af-icon.approve  { background: #f3e5f5; color: #7b1fa2; }
+  .af-icon.lock     { background: #e8f5e9; color: #2e7d32; }
+
+  /* Command reference */
+  .cmd-block {
+    background: #1a1a2e;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin-top: 12px;
+    overflow-x: auto;
+  }
+
+  .cmd-block code {
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 12.5px;
+    color: #e8eaf6;
+    line-height: 1.7;
+    white-space: pre;
+    display: block;
+  }
+
+  .cmd-block code .comment { color: #636e8a; }
+  .cmd-block code .flag    { color: #80cbc4; }
+  .cmd-block code .path    { color: #ffcc80; }
+  .cmd-block code .string  { color: #a5d6a7; }
+
+  footer {
+    text-align: center;
+    font-size: 12px;
+    color: #aaa;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+  }
+
+  @media (max-width: 700px) {
+    .approval-flow { flex-direction: column; }
+    .af-arrow { transform: rotate(90deg); padding: 4px 0; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Newsletter Image Creation — Workflow</h1>
+  <p>Complete end-to-end process: Banner → GMB Share → Section Images</p>
+</header>
+
+<!-- ── ABSOLUTE RULES ── -->
+<div class="rules">
+  <div class="rule-pill"><span class="dot dot-red"></span>Faces must NEVER be cut off in any image</div>
+  <div class="rule-pill"><span class="dot dot-red"></span>Text must NEVER cover a face on banners</div>
+  <div class="rule-pill"><span class="dot dot-green"></span>Banner Raw must be approved before GMB Share is built</div>
+  <div class="rule-pill"><span class="dot dot-blue"></span>Delete rejected assets after approval</div>
+  <div class="rule-pill"><span class="dot dot-orange"></span>Sonar only for politicians & world events</div>
+</div>
+
+<!-- ── APPROVAL OVERVIEW ── -->
+<div class="approval-flow">
+  <div class="af-step">
+    <div class="af-icon receive">📩</div>
+    <p>Receive Newsletter</p>
+    <small>Full copy + articles</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon build">🖼</div>
+    <p>Build Banner</p>
+    <small>Sonar / AI / Pexels</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon approve">📤</div>
+    <p>Banner Approval</p>
+    <small>Image + title text</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon lock">🔒</div>
+    <p>Banner Locked</p>
+    <small>Raw saved to out/</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon build">🖼</div>
+    <p>Build GMB Share</p>
+    <small>From Banner Raw</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon approve">📤</div>
+    <p>GMB Approval</p>
+    <small>Title + intro text</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon lock">🔒</div>
+    <p>GMB Locked</p>
+    <small>Saved to out/</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon build">🖼</div>
+    <p>Build Sections</p>
+    <small>One per section</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon approve">📤</div>
+    <p>Sections Approval</p>
+    <small>All sections at once</small>
+  </div>
+  <div class="af-arrow">→</div>
+  <div class="af-step">
+    <div class="af-icon lock">✅</div>
+    <p>Done</p>
+    <small>Delete rejected</small>
+  </div>
+</div>
+
+<!-- ── MERMAID FLOWCHART ── -->
+<div class="mermaid-wrap">
+<div class="mermaid">
+%%{init: {'theme': 'base', 'themeVariables': {
+  'primaryColor': '#1565C0',
+  'primaryTextColor': '#fff',
+  'primaryBorderColor': '#0d47a1',
+  'lineColor': '#555',
+  'secondaryColor': '#e8f5e9',
+  'tertiaryColor': '#fff3e0',
+  'edgeLabelBackground': '#f5f6fa',
+  'fontSize': '14px'
+}}}%%
+
+flowchart TD
+    START(["📩  Receive Newsletter"])
+
+    START --> S1_HEAD
+
+    S1_HEAD(["── STAGE 1: BANNER IMAGE ──"]):::stage1head
+    S1_HEAD --> DEC_POL
+
+    DEC_POL{"Politician or\nworld event?"}:::decision
+
+    DEC_POL -- "YES" --> SONAR
+    DEC_POL -- "NO" --> DUAL
+
+    SONAR["🔎  Sonar Search\nBrowse candidates\nPick best image\nNo-text rule"]:::sonar
+
+    DUAL["Build TWO options"]:::process
+
+    DUAL --> AI_B
+    DUAL --> PEX_B
+
+    AI_B["🤖  AI Banner\nGemini Flash Image\nArt Director prompt"]:::ai
+    PEX_B["📷  Pexels Banner\nStock photo\nmatching topic"]:::pexels
+
+    SONAR --> TEXTRULE
+    AI_B   --> TEXTRULE
+    PEX_B  --> TEXTRULE
+
+    TEXTRULE["Apply Text Rules\nupper-left  /  lower-left  /  center  /  no-text\nFaces rule: text must NEVER cover a face"]:::process
+
+    TEXTRULE --> APP_BAN
+
+    APP_BAN(["📤  Send banner options for APPROVAL"]):::approval
+
+    APP_BAN --> DEC_BAN
+
+    DEC_BAN{"Approved?"}:::decision
+
+    DEC_BAN -- "Revise title\nor image" --> TEXTRULE
+    DEC_BAN -- "✓  Yes" --> LOCKED_BAN
+
+    LOCKED_BAN["🔒  Banner Raw locked\nout/{name} Banner Raw.png"]:::locked
+
+    LOCKED_BAN --> S2_HEAD
+
+    S2_HEAD(["── STAGE 2: GMB SHARE ──"]):::stage2head
+    S2_HEAD --> GMB_BLD
+
+    GMB_BLD["Build GMB Share Image\nusing approved Banner Raw\nbuild_newsletter_custom.py\nWrite title1 + intro"]:::process
+
+    GMB_BLD --> APP_GMB
+
+    APP_GMB(["📤  Send GMB Share for APPROVAL\nReview: title1 text + intro copy"]):::approval
+
+    APP_GMB --> DEC_GMB
+
+    DEC_GMB{"Approved?"}:::decision
+
+    DEC_GMB -- "Revise title\nor intro" --> GMB_BLD
+    DEC_GMB -- "✓  Yes" --> LOCKED_GMB
+
+    LOCKED_GMB["🔒  GMB Share locked\nout/{title1} GMB Share.png"]:::locked
+
+    LOCKED_GMB --> S3_HEAD
+
+    S3_HEAD(["── STAGE 3: SECTION IMAGES ──"]):::stage3head
+    S3_HEAD --> SEC_IDENT
+
+    SEC_IDENT["For each newsletter section\nidentify section type"]:::process
+
+    SEC_IDENT --> DEC_SEC
+
+    DEC_SEC{"Section type?"}:::decisionpurp
+
+    DEC_SEC -- "CMT article\n(canadianmortgagetrends.com)" --> CMT_PATH
+    DEC_SEC -- "Ask Ross article\nclient story / insert" --> AR_PATH
+
+    CMT_PATH["CMT Section\n🔴  Article OG image\n🔵  Pexels option\n— always build both —"]:::cmt
+
+    AR_PATH["Ask Ross Section\n🟣  AI generated\nPexels only on request"]:::askross
+
+    CMT_PATH --> FACE_CHK
+    AR_PATH  --> FACE_CHK
+
+    FACE_CHK{"Faces\ncut off?"}:::decision
+
+    FACE_CHK -- "YES →\nregenerate" --> SEC_IDENT
+    FACE_CHK -- "NO  ✓" --> APP_SEC
+
+    APP_SEC(["📤  Send ALL section images for APPROVAL"]):::approval
+
+    APP_SEC --> DEC_SECAPP
+
+    DEC_SECAPP{"Approved?"}:::decision
+
+    DEC_SECAPP -- "Revise →\nregenerate" --> SEC_IDENT
+    DEC_SECAPP -- "✓  Yes" --> DEL_REJ
+
+    DEL_REJ["🗑️  Delete rejected assets from out/"]:::delete
+
+    DEL_REJ --> DONE
+
+    DONE(["✅  ALL IMAGES COMPLETE & APPROVED"]):::done
+
+    classDef default      fill:#1565C0,stroke:#0d47a1,color:#fff,rx:6
+    classDef decision     fill:#e65100,stroke:#bf360c,color:#fff
+    classDef decisionpurp fill:#311b92,stroke:#1a0070,color:#fff
+    classDef approval     fill:#6a1b9a,stroke:#4a148c,color:#fff,rx:20
+    classDef locked       fill:#2e7d32,stroke:#1b5e20,color:#fff
+    classDef sonar        fill:#0d47a1,stroke:#002171,color:#fff
+    classDef ai           fill:#283593,stroke:#1a237e,color:#fff
+    classDef pexels       fill:#1976d2,stroke:#0d47a1,color:#fff
+    classDef cmt          fill:#880e4f,stroke:#560027,color:#fff
+    classDef askross      fill:#4a148c,stroke:#311b92,color:#fff
+    classDef delete       fill:#b71c1c,stroke:#7f0000,color:#fff
+    classDef done         fill:#1b5e20,stroke:#003300,color:#fff
+    classDef process      fill:#1565c0,stroke:#0d47a1,color:#fff
+    classDef stage1head   fill:#0d47a1,stroke:#002171,color:#fff,rx:20
+    classDef stage2head   fill:#1b5e20,stroke:#003300,color:#fff,rx:20
+    classDef stage3head   fill:#311b92,stroke:#1a0070,color:#fff,rx:20
+</div>
+</div>
+
+<!-- ── DECISION TABLES ── -->
+<div class="tables">
+
+  <div class="table-card t1">
+    <h3>Banner — Image Source</h3>
+    <table>
+      <tr><td>Named politician or world event</td><td>Sonar (1 image, no-text)</td></tr>
+      <tr><td>Lifestyle / housing / rates / abstract</td><td>AI (Gemini Flash) + Pexels — build both</td></tr>
+      <tr><td>You have a specific photo</td><td>Custom (from in/ folder)</td></tr>
+    </table>
+  </div>
+
+  <div class="table-card t2">
+    <h3>Banner — Text Position</h3>
+    <table>
+      <tr><td>Ross Taylor</td><td>No text</td></tr>
+      <tr><td>Named politician / powerful editorial</td><td>No text</td></tr>
+      <tr><td>No prominent people — abstract, landscape</td><td>Center text</td></tr>
+      <tr><td>People in lower half, space above</td><td>Upper-left  (y = 213)</td></tr>
+      <tr><td>People in upper half, space below</td><td>Lower-left  (y ≈ 550)</td></tr>
+    </table>
+  </div>
+
+  <div class="table-card t3">
+    <h3>Section Images — Options to Build</h3>
+    <table>
+      <tr><td>CMT article (canadianmortgagetrends.com)</td><td>Article OG image + Pexels (always both)</td></tr>
+      <tr><td>Ask Ross article / client story / insert</td><td>AI only (Pexels only if requested)</td></tr>
+    </table>
+  </div>
+
+</div>
+
+<!-- ── STAGE DETAIL ── -->
+
+<div class="stage">
+  <div class="stage-header s1">
+    <h2>STAGE 1 — BANNER IMAGE</h2>
+    <span class="badge">build_newsletter_banner.py</span>
+    <span class="badge">1200 × 800 px</span>
+  </div>
+  <div class="stage-body">
+    <div class="cmd-block"><code><span class="comment"># Sonar — browse candidates first, then build</span>
+python "(1) Banner Images/build_newsletter_banner.py" --source sonar \
+  <span class="flag">--sonar-query</span> <span class="string">"Mark Carney 2025"</span> <span class="flag">--list-images</span> <span class="flag">--recency</span> week
+
+python "(1) Banner Images/build_newsletter_banner.py" --source sonar \
+  <span class="flag">--sonar-query</span> <span class="string">"Mark Carney 2025"</span> <span class="flag">--use-cache</span> <span class="flag">--image-index</span> 1 \
+  <span class="flag">--name</span> <span class="string">"Carney Housing Win"</span> <span class="flag">--no-text</span>
+
+<span class="comment"># AI banner (always build alongside Pexels for non-Sonar)</span>
+python "(1) Banner Images/build_newsletter_banner.py" --source ai \
+  <span class="flag">--banner-prompt</span> <span class="string">"&lt;Art Director output from prompt-builder.md&gt;"</span> \
+  <span class="flag">--name</span> <span class="string">"Spring 2025 Market"</span> \
+  <span class="flag">--title</span> <span class="string">"Is now the right time to buy a home in Canada?"</span> \
+  <span class="flag">--text-position</span> upper-left
+
+<span class="comment"># Pexels banner (always build this too for non-Sonar)</span>
+python "(1) Banner Images/build_newsletter_banner.py" --source pexels \
+  <span class="flag">--pexels-query</span> <span class="string">"spring Canada neighbourhood real estate"</span> \
+  <span class="flag">--name</span> <span class="string">"Spring 2025 Market Pexels"</span> \
+  <span class="flag">--title</span> <span class="string">"Is now the right time to buy a home in Canada?"</span> \
+  <span class="flag">--text-position</span> center
+
+<span class="comment"># Title-only tweak — no re-fetch</span>
+python "(1) Banner Images/build_newsletter_banner.py" --source custom \
+  <span class="flag">--banner-image</span> <span class="path">"out/Spring 2025 Market Banner Raw.png"</span> \
+  <span class="flag">--name</span> <span class="string">"Spring 2025 Market v2"</span> \
+  <span class="flag">--title</span> <span class="string">"New title text here"</span> <span class="flag">--text-position</span> upper-left</code></div>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="stage-header s2">
+    <h2>STAGE 2 — GMB SHARE IMAGE</h2>
+    <span class="badge">build_newsletter_custom.py</span>
+    <span class="badge">1200 × 900 px</span>
+  </div>
+  <div class="stage-body">
+    <div class="cmd-block"><code><span class="comment"># Standard: use approved Banner Raw as input</span>
+python "(2) GMB Share Images/build_newsletter_custom.py" \
+  <span class="flag">--banner-image</span> <span class="path">"out/{name} Banner Raw.png"</span> \
+  <span class="flag">--title1</span> <span class="string">"Your Spring Advantage: Play the Market Before It Plays You"</span> \
+  <span class="flag">--intro</span>  <span class="string">"Spring is here and the Canadian housing market is moving..."</span></code></div>
+  </div>
+</div>
+
+<div class="stage">
+  <div class="stage-header s3">
+    <h2>STAGE 3 — SECTION IMAGES</h2>
+    <span class="badge">build_newsletter_section.py</span>
+    <span class="badge">1200 × 400 px</span>
+  </div>
+  <div class="stage-body">
+    <div class="cmd-block"><code><span class="comment"># CMT section — Option A (article OG image)</span>
+python "(3) Section Images/build_newsletter_section.py" --source cmt \
+  <span class="flag">--cmt-url</span> <span class="string">"https://www.canadianmortgagetrends.com/article-slug/"</span> \
+  <span class="flag">--name</span> <span class="string">"Retirement Mortgage CMT"</span>
+
+<span class="comment"># CMT section — Option B (Pexels — always build for CMT)</span>
+python "(3) Section Images/build_newsletter_section.py" --source pexels \
+  <span class="flag">--pexels-query</span> <span class="string">"retirement couple Canadian home"</span> \
+  <span class="flag">--section-type</span> cmt <span class="flag">--name</span> <span class="string">"Retirement Mortgage Pexels"</span>
+
+<span class="comment"># Ask Ross section — AI only (default)</span>
+python "(3) Section Images/build_newsletter_section.py" --source ai \
+  <span class="flag">--banner-prompt</span> <span class="string">"Wide 16:4 panoramic, Bank of Canada Ottawa, dramatic sky, no text"</span> \
+  <span class="flag">--section-type</span> askross <span class="flag">--name</span> <span class="string">"BoC Rate AI"</span></code></div>
+  </div>
+</div>
+
+<footer>
+  Newsletter Image Creation — Ask Ross (Ross Taylor Mortgages) &nbsp;·&nbsp;
+  Scripts in <code style="background:#eee;padding:2px 6px;border-radius:4px;font-size:11px">Newsletter Image Creation/</code>
+</footer>
+
+<script>
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'base',
+    flowchart: { useMaxWidth: true, htmlLabels: true, curve: 'linear' },
+    themeVariables: {
+      primaryColor: '#1565C0',
+      primaryTextColor: '#ffffff',
+      primaryBorderColor: '#0d47a1',
+      lineColor: '#555555',
+      fontSize: '14px'
+    }
+  });
+</script>
+
+</body>
+</html>

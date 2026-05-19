@@ -1,0 +1,888 @@
+<!-- wp:heading -->
+<h1 class="wp-block-heading" id="Why Are Global Events Driving the Bank of Canada Rate Hold?</h1>
+<!-- /wp:heading -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-the-bank-of-canada-rate-hold-and-what-it-means-for-your-spring-plans"><strong>The Bank Of Canada Rate Hold And What It Means For Your Spring Plans</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The Bank of Canada<span style="box-sizing: border-box; margin: 0px; padding: 0px;"> </span><a href="https://www.bankofcanada.ca/2026/03/fad-press-release-2026-03-18/&amp;sa=D&amp;source=editors&amp;ust=1773942769162248&amp;usg=AOvVaw0eTmyjPrFvYlwxu5Yav1Rx"> held its policy rate at 2.25%</a>. No surprise there.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>This is not relief. <strong>It is a pause.</strong> Too many Canadians are going to misread this as good news when, in reality, <strong>the pressure has not gone away.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>There is still too much uncertainty in the world right now.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Tension in the Middle East is pushing oil prices up, and that makes everyday costs rise again. At the same time, <strong>inflation in the US </strong><span style="box-sizing: border-box; margin: 0px; padding: 0px;"><strong>re</strong></span><strong>mains high, keeping borrowing costs elevated in Canada.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The Bank of Canada didn’t lower or increase rates because <strong>the outlook is still too unstable.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>So where does that leave you as a homeowner or buyer heading into spring?</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading" id="1"><strong>Jump to a specific section in this article <a href="#1">↓↓</a></strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li><a href="#2">How are global events actually affecting mortgage rates right now?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#4">Did the Bank of Canada just signal lower rates are coming?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#6">Could rates still go higher later this year?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#7">What happens to your mortgage right now?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#9">Why are fixed rates still going up?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#11">Should you renew now or wait?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#13">What does this mean for spring home buyers?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#14">Are prices actually dropping in Toronto and Vancouver?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#15">What should you expect from the spring market overall?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#16">What should Canadians actually do right now?</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#17">Bottom line: Bank of Canada rate hold and what it really means</a></li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li><a href="#18">List of all FAQs: Bank of Canada Rate Hold and Mortgage Impact</a></li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:image {"id":45738,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="2"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-How-are-global-events-affecting-mortgage-rates-right-now-711x400.jpg" alt="AskRoss.ca - How are global events affecting mortgage rates right now" class="wp-image-45738" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-how-are-global-events-actually-affecting-mortgage-rates-right-now"><strong>How are global events actually affecting mortgage rates right now?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>We are seeing <strong>ongoing geopolitical tension in the Middle East,</strong> particularly involving oil-producing regions. When that heats up, oil prices rise.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>When oil rises, inflation follows. It hits fuel, transportation, groceries, and pretty much every part of the economy.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>At the same time, the US is still dealing with stubborn inflation. </strong>If the Federal Reserve keeps rates higher for longer, that pushes bond yields up globally, including here in Canada.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>When bond yields rise, <strong>fixed mortgage rates follow.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Then you layer in trade uncertainty and tariffs, <strong>which increase the cost of goods and slow down global growth.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>That creates a messy situation where <strong>inflation can stay elevated even as the economy softens.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>So while this rate hold looks calm, <strong>the risks underneath are not.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading"><strong>What factors are affecting mortgage rates?</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Oil price volatility from geopolitical conflict can quickly push inflation higher.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>US inflation and Federal Reserve policy are keeping global bond yields elevated.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Rising bond yields directly increase fixed mortgage rates in Canada.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Trade tensions and tariffs are adding cost pressure across supply chains.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Inflation can reaccelerate even in a slowing economy.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>The Bank of Canada will prioritize inflation control over rate cuts.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45744,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="4"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-Why-is-Torontos-condo-market-crashing-711x400.jpg" alt="AskRoss.ca - Did the Bank of Canada just signal lower rates are coming?" class="wp-image-45744" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-did-the-bank-of-canada-just-signal-lower-rates-are-coming"><strong>Did the Bank of Canada just signal lower rates are coming?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>No. <strong>A hold is not a signal that cuts are around the corner.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>What it tells me is <strong>the Bank is not confident enough to move in either direction.</strong> Inflation is behaving, but not completely under control.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>The economy is slowing, but not enough to justify stimulus.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading" id="h-what-this-rate-hold-actually-tells-you"><strong>What this rate hold actually tells you</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>The Bank is cautious, not confident.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Rate cuts are not guaranteed in the near term.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Inflation risks are still on the table.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Borrowing costs are staying higher for longer.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>You need a plan that does not rely on rates dropping soon.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45737,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="6"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-Could-rates-still-go-higher-later-this-year-711x400.jpg" alt="AskRoss.ca - Could rates still go higher later this year" class="wp-image-45737" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-could-rates-still-go-higher-later-this-year"><strong>Could rates still go higher later this year?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>Yes, and this is what too many Canadians are ignoring.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Everyone is focused on when rates will come down. Very few are asking <strong>what happens if they do not.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>Or worse, what happens if they go back up?</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The Bank of Canada held because inflation is close to the target, but it is not locked in. <strong>The biggest risk right now is events happening outside Canada.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45740,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="7"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-What-happens-to-your-mortgage-right-now-711x400.jpg" alt="AskRoss.ca - What happens to your mortgage right now" class="wp-image-45740" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-what-happens-to-your-mortgage-right-now"><strong>What happens to your mortgage right now?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Simple answer, <strong>not much changes today.</strong> </p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>If you have a variable rate, you get stability for now. <strong>Your rate and payment likely stay where they are.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>If you are looking for a fixed rate or<strong> <a href="https://askross.ca/10-ways-to-manage-higher-mortgage-payments-in-2026/">renewing soon</a>, </strong>this is where it can hurt. <strong>Fixed rates have already been creeping up,</strong> and this announcement does nothing to stop that.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading"><strong>What you should understand about your mortgage</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Variable rates stay steady with this rate hold.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Fixed rates can still rise regardless of the Bank.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Most borrowers <a href="https://askross.ca/10-ways-to-manage-higher-mortgage-payments-in-2026/">renewing in 2026,</a> especially those who took mortgages during the low‑rate pandemic period, will face higher rates.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45743,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="9"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-Why-are-fixed-rates-still-going-up-711x400.jpg" alt="AskRoss.ca - Why are fixed rates still going up" class="wp-image-45743" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-why-are-fixed-rates-still-going-up"><strong>Why are fixed rates still going up?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>Because the Bank of Canada <strong>does not control fixed rates.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>Bond yields do. Right now, <a href="https://askross.ca/mortgage-renewal-rates-forecast-2026-canada/">bond yields are rising</a> </strong>because of inflation concerns, oil prices, and global uncertainty.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>This is where I see the most confusion. People hear “rates held” and assume everything freezes. <strong>It does not.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading"><strong>What is actually driving fixed rates</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Bond yields are trending higher.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Oil prices are pushing inflation risk.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Global instability is keeping markets on edge.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Lenders are pricing in future uncertainty.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Fixed mortgage pricing is reacting to all of this, not the Bank alone.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45739,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="11"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-Should-you-renew-now-or-wait-711x400.jpg" alt="AskRoss.ca - Should you renew now or wait" class="wp-image-45739" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-should-you-renew-now-or-wait"><strong>Should you renew now or wait?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>If your mortgage is coming up for <a href="https://askross.ca/what-will-happen-to-my-mortgage-payments-when-my-low-rate-expires/">renewal soon, </a><strong>do not sit around waiting for the Bank of Canada to lower rates.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>You need to look at where fixed rates are today versus where they <em>could</em> be in a few months. <strong>Right now, the risk is they move higher, not lower.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading"><strong>How to approach your renewal decision</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Speak to a mortgage professional early.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Have them run your numbers on your current and new payment rates.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Lock in early if you want certainty and stability.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Consider a variable mortgage if you can handle some risk.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45754,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="13"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-What-does-this-mean-for-spring-home-buyers-711x400.jpg" alt="AskRoss.ca - What does this mean for spring home buyers" class="wp-image-45754" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-what-does-this-mean-for-spring-home-buyers"><strong>What does this mean for spring home buyers?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>This is not a hot market. <strong>It’s a controlled one.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>There is no rate cut to fuel urgency. Buyers are still cautious, and sellers need to adjust their pricing.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Inventory is building in some areas. <strong>That creates an opportunity if you are prepared.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading"><strong>What buyers should expect this spring</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>More choice and less competition in many segments.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>With more supply, there’s more room to negotiate.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>A slower, more deliberate buying process.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45735,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="14"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-Are-prices-dropping-in-Toronto-and-Vancouver-711x400.jpg" alt="AskRoss.ca - Are prices dropping in Toronto and Vancouver" class="wp-image-45735" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-are-prices-actually-dropping-in-toronto-and-vancouver"><strong>Are prices actually dropping in Toronto and Vancouver?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>What we are seeing is flat to slightly soft pricing, especially in areas with more supply.</strong> Condos are the most obvious example.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>If you are waiting for a major correction, <strong>you may be waiting a long time.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading"><strong>Where pricing is under pressure</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Toronto and Vancouver's condo markets are dealing with excess inventory.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Sellers are facing higher renewal costs.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Overpriced listings that need adjustment.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Slower-moving neighbourhoods.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>More properties that require work to be sellable.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45742,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="15"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-What-should-you-expect-from-the-spring-market-overall-711x400.jpg" alt="AskRoss.ca - What should you expect from the spring market overall" class="wp-image-45742" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-what-should-you-expect-from-the-spring-market-overall"><strong>What should you expect from the spring market overall?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>Balanced, but not booming.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong>There is some pent-up demand, but not enough to drive a buying surge. </strong>Buyers are still cautious, and affordability is still a limiting factor for many Canadians.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>The bigger issue, and this is important, is what happens long term. <strong>Slower construction creates supply problems later.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading"><strong>The trends that matter right now</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Inventory is rising in key markets.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Buyers are taking more time.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>New constructions are slowing down.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Condo demand is weaker than it’s been in years.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45741,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="16"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-What-should-Canadians-actually-do-right-now-711x400.jpg" alt="AskRoss.ca - What should Canadians actually do right now" class="wp-image-45741" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-what-should-canadians-actually-do-right-now"><strong>What should Canadians actually do right now?</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p><strong>Focus on what you can control.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>Not the next announcement. Not the next headline. <strong>Your numbers.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>If you are buying, know your budget. If you are <a href="https://askross.ca/what-will-happen-to-my-mortgage-payments-when-my-low-rate-expires/">renewing, act early.</a> If you are stretched, work on fixing your financial situation before taking on more debt.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:heading {"level":3} -->
+<h3 class="wp-block-heading"><strong>The moves that make the most sense today</strong></h3>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Review your mortgage well before renewal.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Make a budget using current rates.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Focus on reducing any high-interest debt.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Get pre-approved before shopping.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Prioritize long-term affordability over maximum borrowing.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45736,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="17"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-Bottom-line_-Bank-of-Canada-rate-hold-and-what-it-really-means-711x400.jpg" alt="AskRoss.ca - Bottom line_ Bank of Canada rate hold and what it really means" class="wp-image-45736" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-bottom-line-bank-of-canada-rate-hold-and-what-it-really-means"><strong>Bottom line: Bank of Canada rate hold and what it really means</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:paragraph -->
+<p>The Bank of Canada rate hold presents a sense of stability. <strong>But beneath the surface, borrowing costs, renewal pressure, and rate affordability challenges remain very real for Canadians.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>With the spring market comes opportunity to those who are prepared. <strong>It’s time to get clear on your numbers and make a plan.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p>If you are not sure what your next move should be, whether that is renewing, buying, or restructuring your mortgage, <a href="https://askross.ca/mortgage-broker-toronto/">my team and I will</a><strong><a href="https://askross.ca/mortgage-broker-toronto/"> </a>help you map out a strategy that works for you.</strong></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p><strong><a href="https://askross.ca/mortgage-broker-toronto/">Reach out to us</a>, </strong>and we will walk you through all of your options.</p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:image {"id":45745,"width":"840px","height":"auto","sizeSlug":"large","linkDestination":"none"} -->
+<figure class="wp-block-image size-large is-resized" id="18"><img src="https://askross.ca/wp-content/uploads/2026/03/AskRoss.ca-FAQs_-Bank-of-Canada-Rate-Hold-and-Mortgage-Impact-711x400.jpg" alt="AskRoss.ca -FAQs_ Bank of Canada Rate Hold and Mortgage Impact" class="wp-image-45745" style="width:840px;height:auto"/></figure>
+<!-- /wp:image -->
+
+<!-- wp:heading -->
+<h2 class="wp-block-heading" id="h-list-of-all-faqs-bank-of-canada-rate-hold-and-mortgage-impact"><strong>List of all FAQs: Bank of Canada Rate Hold and Mortgage Impact</strong></h2>
+<!-- /wp:heading -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>So, why did the Bank of Canada hold its rate?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>The Bank is waiting due to ongoing inflation risks and global uncertainty.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>It reflects caution, not confidence in lowering or raising rates.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>How are global events actually affecting mortgage rates right now?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Oil prices, US inflation, and global tensions are pushing inflation and bond yields higher.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Higher bond yields are directly increasing fixed mortgage rates.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>Did the Bank of Canada signal rate cuts are coming?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>No, a hold does not guarantee future rate cuts.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>It indicates uncertainty and a wait-and-see approach.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>Could rates still go higher later this year?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Yes, especially if inflation rises again or global risks worsen.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>External factors remain the biggest threat.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>What happens to your mortgage right now?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Variable rates stay stable, but fixed rates can still increase.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Renewals may still come at higher costs.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>Why are fixed rates still going up?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Fixed rates follow bond yields, not the Bank of Canada directly.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Rising inflation concerns and global instability are pushing yields higher.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>Should you renew now or wait?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Waiting is risky if rates rise further.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Early planning and rate comparison are key to making the right decision.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>What does this mean for spring home buyers?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>The market is balanced with more inventory and less competition.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Buyers have more negotiating power but still face affordability challenges.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>Are prices dropping in Toronto and Vancouver?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Prices are mostly flat or slightly soft, especially in condo markets.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>No major crash is currently happening.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>What should you expect from the spring market overall?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>A slower, more balanced market with cautious buyers.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Long term supply issues may develop due to reduced construction.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>What should Canadians do right now?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Focus on budgeting, planning, and reducing debt.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Make decisions based on current rates, not future predictions.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>How do interest rates affect mortgage payments in Canada?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Higher rates increase monthly payments and reduce borrowing power.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Lower rates improve affordability but are not guaranteed soon.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>Is it better to choose fixed or variable rates right now?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Fixed offers stability and predictability.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Variable may offer flexibility, but comes with risk if rates rise.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading" id="h-how-can-i-prepare-for-a-mortgage-renewal-in-a-high-rate-environment"><strong>How can I prepare for a mortgage renewal in a high-rate environment?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>Start early, review your finances, and explore options.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Work with a professional to compare lenders and strategies.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:heading {"level":4} -->
+<h4 class="wp-block-heading"><strong>Will mortgage rates go down in 2026?</strong></h4>
+<!-- /wp:heading -->
+
+<!-- wp:list -->
+<ul class="wp-block-list"><!-- wp:list-item -->
+<li>There is no certainty; rates depend on inflation and global conditions.</li>
+<!-- /wp:list-item -->
+
+<!-- wp:list-item -->
+<li>Planning should assume rates may stay higher longer.</li>
+<!-- /wp:list-item --></ul>
+<!-- /wp:list -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><a href="#1">↑↑ Back to the list at the top ↑↑</a></p>
+<!-- /wp:paragraph -->
+
+<!-- wp:paragraph {"align":"right"} -->
+<p class="has-text-align-right"><br></p>
+<!-- /wp:paragraph -->
+
+<hr />
+
+<!-- wp:media-text {"mediaId":41104,"mediaLink":"https://askross.ca/wp-content/uploads/2024/07/MAIN-ASK-ROSS-CIRCLE-IMAGE.png","mediaType":"image","mediaWidth":36} -->
+<div class="wp-block-media-text is-stacked-on-mobile" style="grid-template-columns:36% auto"><figure class="wp-block-media-text__media"><img src="https://askross.ca/wp-content/uploads/2024/07/MAIN-ASK-ROSS-CIRCLE-IMAGE.png" alt="" class="wp-image-41104 size-full"/></figure><div class="wp-block-media-text__content">
+<!-- wp:heading -->
+<h2 class="wp-block-heading">Ross Taylor Mortgages</h2>
+<!-- /wp:heading -->
+<!-- wp:paragraph -->
+<p>If you want great service from someone you can trust – reach out to us today.</p>
+<!-- /wp:paragraph -->
+<!-- wp:paragraph -->
+<p>Get quick answers to your questions, no matter how difficult - 7 days a week.</p>
+<!-- /wp:paragraph -->
+<br>
+<!-- wp:html -->
+<div class="button-wrap"><a class="custom-btn marbtm30" href="https://go.oncehub.com/RossTaylor">ASK ROSS</a></div>
+<!-- /wp:html -->
+<!-- wp:group {"layout":{"type":"flex","flexWrap":"nowrap"}} -->
+<div class="wp-block-group">
+<!-- wp:preformatted {"fontSize":"medium"} -->
+<pre class="wp-block-preformatted has-medium-font-size"></pre>
+<!-- /wp:preformatted -->
+</div>
+<!-- /wp:group -->
+</div></div>
+<!-- /wp:media-text -->
+
+<!-- wp:paragraph -->
+<p></p>
+<!-- /wp:paragraph -->
