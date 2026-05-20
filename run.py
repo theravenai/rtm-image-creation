@@ -110,7 +110,7 @@ ASSET_PATHS = {
         SCRIPT_DIR / "fonts" / "Aleo" / "static" / "Aleo-SemiBold.ttf"
     ),
     "font_opensans": (
-        SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-ExtraBold.ttf"
+        SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-Bold.ttf"
     ),
     # Manifest
     "manifest": SCRIPT_DIR / "out" / "manifest.json",

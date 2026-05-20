@@ -34,9 +34,9 @@ CANVAS_H = 900
 # Title text constants per RULES.md
 GMB_TEXT_X       = 237   # left margin (aligns with embedded branding)
 GMB_TEXT_Y       = 587   # below city name element (y≈544-558)
-GMB_MAX_WIDTH    = 960   # 1200 - 237 - 3px right margin
+GMB_MAX_WIDTH    = 660   # matches design template text box (pixel-measured from reference)
 GMB_LINE_HEIGHT  = 45    # measured from ground truth: line2_top - line1_top = 631-586
-GMB_START_SIZE   = 44    # start high; auto-fit steps down to fit zone
+GMB_START_SIZE   = 29    # design spec size (pixel-calibrated from reference sample)
 GMB_MIN_SIZE     = 18
 GMB_MAX_LINES    = 2
 

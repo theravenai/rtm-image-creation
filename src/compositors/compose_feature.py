@@ -12,7 +12,7 @@ Two text layers (rendered after overlay):
     Max width: 560px
 
   Layer 2 — MAIN TITLE
-    Font:     Open Sans ExtraBold, ALL CAPS
+    Font:     Open Sans Bold, ALL CAPS
     Size:     auto-fit 28→14px
     Position: x=138, y=306 (2-line overlay) or y=286 (3-line overlay)
     Max width: 560px
@@ -143,7 +143,7 @@ def compose_feature_image(
         min_size=TITLE_MIN_SIZE,
     )
     title_line_height = title_font.size + 10
-    print(f"    Title: {len(title_lines)} lines at {title_font.size}px Open Sans ExtraBold")
+    print(f"    Title: {len(title_lines)} lines at {title_font.size}px Open Sans Bold")
     canvas = draw_text_with_shadow(
         canvas=canvas,
         lines=title_lines,
