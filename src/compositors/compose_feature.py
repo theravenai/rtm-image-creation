@@ -46,8 +46,8 @@ THEME_MIN_SIZE   = 12
 
 # Title text — Open Sans ExtraBold, ALL CAPS
 TITLE_X_2LINE   = 138
-TITLE_Y_2LINE   = 306   # for 2-line overlay
-TITLE_Y_3LINE   = 286   # for 3-line overlay (10px higher to accommodate extra line)
+TITLE_Y_2LINE   = 303   # for 2-line overlay
+TITLE_Y_3LINE   = 283   # for 3-line overlay (10px higher to accommodate extra line)
 TITLE_MAX_WIDTH = 560
 TITLE_START_SIZE = 28
 TITLE_MIN_SIZE   = 14
@@ -143,7 +143,7 @@ def compose_feature_image(
         min_size=TITLE_MIN_SIZE,
     )
     title_line_height = title_font.size + 10
-    print(f"    Title: {len(title_lines)} lines at {title_font.size}px Open Sans Bold")
+    print(f"    Title: {len(title_lines)} lines at {title_font.size}px Open Sans SemiBold")
     canvas = draw_text_with_shadow(
         canvas=canvas,
         lines=title_lines,
