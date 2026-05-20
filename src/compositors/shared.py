@@ -99,6 +99,29 @@ def fit_font_size(
     return font, lines
 
 
+def prevent_widow(lines: list, font: ImageFont.FreeTypeFont, max_width: int) -> list:
+    """Move one word from the penultimate line to the last line if the last line
+    has only one word (typographic widow prevention).
+
+    Only acts when there are ≥2 lines and the last line is a single word.
+    Returns the original list unchanged if the fix cannot be applied cleanly.
+    """
+    if len(lines) < 2:
+        return lines
+    if len(lines[-1].split()) >= 2:
+        return lines
+    prev_words = lines[-2].split()
+    if len(prev_words) <= 1:
+        return lines
+    moved = prev_words[-1]
+    new_prev = " ".join(prev_words[:-1])
+    new_last = moved + " " + lines[-1]
+    bb = font.getbbox(new_last)
+    if bb[2] - bb[0] <= max_width:
+        return lines[:-2] + [new_prev, new_last]
+    return lines
+
+
 # ---------------------------------------------------------------------------
 # Text rendering with drop shadow
 # ---------------------------------------------------------------------------

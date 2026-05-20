@@ -21,6 +21,7 @@ from .shared import (
     apply_overlay,
     draw_text_with_shadow,
     fit_font_size,
+    prevent_widow,
     resize_and_center_crop,
     save_rgb,
     sanitize_filename,
@@ -34,8 +35,8 @@ CANVAS_H = 900
 GMB_TEXT_X       = 237   # left margin (aligns with embedded branding)
 GMB_TEXT_Y       = 587   # below city name element (y≈544-558)
 GMB_MAX_WIDTH    = 960   # 1200 - 237 - 3px right margin
-GMB_LINE_HEIGHT  = 40
-GMB_START_SIZE   = 34
+GMB_LINE_HEIGHT  = 45    # measured from ground truth: line2_top - line1_top = 631-586
+GMB_START_SIZE   = 44    # start high; auto-fit steps down to fit zone
 GMB_MIN_SIZE     = 18
 GMB_MAX_LINES    = 2
 
@@ -64,15 +65,17 @@ def compose_gmb_image(
     # 2. Apply city overlay (embeds logo, brand text, red bar, city name)
     canvas = apply_overlay(canvas, overlay_path)
 
-    # 3. Auto-fit Archivo Black for title
+    # 3. Auto-fit Archivo Black for title (ALL CAPS per brand spec)
+    title_upper = title.upper()
     font, lines = fit_font_size(
-        text=title,
+        text=title_upper,
         font_path=font_path,
         max_width=GMB_MAX_WIDTH,
         max_lines=GMB_MAX_LINES,
         start_size=GMB_START_SIZE,
         min_size=GMB_MIN_SIZE,
     )
+    lines = prevent_widow(lines, font, GMB_MAX_WIDTH)
     print(f"    Title: {len(lines)} lines at {font.size}px")
 
     # 4. Render title with drop shadow

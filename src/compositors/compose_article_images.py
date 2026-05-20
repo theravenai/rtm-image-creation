@@ -19,6 +19,7 @@ from .shared import (
     apply_overlay,
     auto_text_position,
     draw_text_with_shadow,
+    prevent_widow,
     resize_and_center_crop,
     save_rgb,
     wrap_text,
@@ -69,6 +70,7 @@ def _render_title(canvas: Image.Image, h2_text: str, font_path: str) -> Image.Im
         align     = "left"
 
     lines = wrap_text(h2_text, font, max_width)
+    lines = prevent_widow(lines, font, max_width)
 
     if position == "upper-left":
         text_x = TEXT_LEFT_MARGIN
