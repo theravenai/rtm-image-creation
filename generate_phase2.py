@@ -261,7 +261,7 @@ def _composite_phase2(manifest: dict, feature_bg: Image.Image, article_bgs: dict
     gmb_overlay_dir       = str(REF_DIR / "BLOG RESHARE - GMB - POST ONLY- IMAGES TEMPLATE")
     font_archivo          = str(REF_DIR / "(2) Newsletter Image Creation - Use for process creation reference" / "(1) Banner Images" / "fonts" / "Archivo_Black" / "ArchivoBlack-Regular.ttf")
     font_aleo             = str(SCRIPT_DIR / "fonts" / "Aleo" / "static" / "Aleo-SemiBold.ttf")
-    font_opensans         = str(SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-Bold.ttf")
+    font_opensans         = str(SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-SemiBold.ttf")
 
     article_title    = manifest["title"]
     title_line_count = manifest.get("title_line_count", 2)
