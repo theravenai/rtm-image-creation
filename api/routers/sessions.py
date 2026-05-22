@@ -798,6 +798,11 @@ async def get_pexels_option(session_id: str, section_number: int, body: dict = {
 
 @router.post("/{session_id}/sections/{section_number}/save-to-pool")
 async def save_section_to_pool(session_id: str, section_number: int, body: dict = {}):
+    """Save a section background (NO text overlay) to the asset pool.
+
+    body.image_type: "background" (default) | "pexels_bg"
+    Always saves the raw background — never the composited version with text.
+    """
     import shutil
 
     session = get_session(session_id)
@@ -807,13 +812,22 @@ async def save_section_to_pool(session_id: str, section_number: int, body: dict 
     if idx < 0:
         raise HTTPException(status_code=404, detail=f"Section {section_number} not found")
 
-    comp_path = sec.get("composited_path")
-    if not comp_path:
-        raise HTTPException(status_code=422, detail="No composited image to save")
+    image_type = body.get("image_type", "background")
 
-    abs_path = SESSIONS_DIR / comp_path
+    if image_type == "pexels_bg":
+        src_rel = sec.get("pexels_background_path")
+        if not src_rel:
+            raise HTTPException(status_code=422, detail="No Pexels background available for this section")
+        abs_path = SESSIONS_DIR / src_rel
+    else:
+        # Default: save the raw AI/Pexels background (no text overlay)
+        src_rel = sec.get("background_path")
+        if not src_rel:
+            raise HTTPException(status_code=422, detail="No background image available for this section")
+        abs_path = SESSIONS_DIR / src_rel
+
     if not abs_path.exists():
-        raise HTTPException(status_code=404, detail="Composited image file not found")
+        raise HTTPException(status_code=404, detail="Background image file not found on disk")
 
     pool_dir = ASSETS_DIR / "pool_images"
     pool_dir.mkdir(parents=True, exist_ok=True)
@@ -840,7 +854,7 @@ async def save_section_to_pool(session_id: str, section_number: int, body: dict 
     }
     save_asset(asset)
 
-    return {"pool_image_id": asset_id, "url": asset["url"], "tags": tags}
+    return {"pool_image_id": asset_id, "url": asset["url"], "tags": tags, "image_type": image_type}
 
 
 # ---------------------------------------------------------------------------
