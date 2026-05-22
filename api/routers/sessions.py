@@ -33,6 +33,7 @@ from ..storage import (
     SESSIONS_DIR,
     create_session,
     delete_session,
+    get_asset,
     get_section_by_number,
     get_session,
     list_sessions,
