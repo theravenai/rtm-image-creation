@@ -20,9 +20,11 @@ Output:
   out/Blog Images - {title}/                — final composited images
 """
 
+import glob as glob_mod
 import io
 import json
 import os
+import random
 import sys
 import time
 from pathlib import Path
@@ -34,6 +36,16 @@ from PIL import Image
 SCRIPT_DIR    = Path(__file__).parent.resolve()
 REF_DIR       = SCRIPT_DIR / "references"
 GENERATED_DIR = SCRIPT_DIR / "out" / "generated"
+
+_HOME_FOR_SALE_POOL = str(
+    REF_DIR / "BLOG POST - Large Article Images for Askross.ca"
+    / "Reusable Image Large Article Image Assets" / "home for sale options" / "*.png"
+)
+
+
+def _is_selling_article(title: str) -> bool:
+    low = title.lower()
+    return any(kw in low for kw in ("sell", "selling", "for sale"))
 
 
 def _load_env():
@@ -104,40 +116,47 @@ def _fetch_pexels(query: str, api_key: str, label: str) -> Image.Image:
 # Section-to-Pexels query mapping
 # ---------------------------------------------------------------------------
 
-def _pexels_query_for_section(section: dict) -> str:
-    """Derive a Pexels search query from the section text and prompt_hint."""
-    text  = section.get("text", "").lower()
-    hint  = section.get("prompt_hint", "").lower()
-    combined = text + " " + hint
-
-    if "equity" in combined or "underwater" in combined or "negative equity" in combined:
-        return "house piggy bank savings financial loss"
-    if "renewal" in combined or "mortgage payment" in combined or "payment shock" in combined:
-        return "couple reviewing bills mortgage documents kitchen"
-    if "warning signs" in combined or "forced sale" in combined or "default" in combined:
-        return "stressed homeowner mortgage notice urgent"
-    if "waiting" in combined or "market recover" in combined:
-        return "calendar waiting financial uncertainty home"
-    if "credit" in combined and "sell" in combined:
-        return "credit score financial improvement laptop"
-    if "financial reset" in combined or "fresh start" in combined:
-        return "couple reviewing budget plan new beginning"
-    if "homeowner" in combined and ("right now" in combined or "happening" in combined):
-        return "Canadian homeowner worried housing market"
-    # Generic fallback
-    return "Canadian home real estate mortgage"
-
-
 def _pexels_query_for_feature(title: str) -> str:
-    """Derive a Pexels search query for the feature/banner/GMB shared background."""
+    """Pexels query for feature bg — only called for non-selling articles."""
     low = title.lower()
-    if "sell" in low or "selling" in low:
-        return "Canadian couple home porch autumn contemplative"
     if "bank of canada" in low or "rate" in low:
-        return "Bank of Canada Ottawa federal building"
-    if "spring" in low or "buy" in low:
-        return "Canadian home spring real estate"
-    return "Canadian neighbourhood autumn houses residential"
+        return "Bank of Canada Ottawa building"
+    if "renewal" in low or "payment shock" in low:
+        return "mortgage document kitchen"
+    if "equity" in low or "underwater" in low:
+        return "house model piggy bank"
+    return "Canadian neighbourhood homes street"
+
+
+def _pexels_query_for_section(section: dict) -> str:
+    """Simple, targeted Pexels search terms — 3-4 words max for best results."""
+    text = section.get("text", "").lower()
+
+    if "actually happening" in text or "right now" in text:
+        return "couple worried mortgage documents"
+    if "renewal" in text and ("worse" in text or "mortgage" in text):
+        return "mortgage renewal letter calendar"
+    if "equity" in text or "underwater" in text:
+        return "house model piggy bank"
+    if "warning" in text or "forced sale" in text:
+        return "foreclosure sign house yard"
+    if "waiting" in text or "market" in text and "recover" in text:
+        return "hourglass calendar time"
+    if "credit" in text:
+        return "credit score laptop"
+    if "reset" in text or "fresh start" in text:
+        return "couple laptop financial planning"
+    return "Canadian home real estate"
+
+
+def _pexels_query_for_bottom_line(manifest: dict) -> str:
+    """Bottom-line uses home for sale pool for selling articles; otherwise Pexels."""
+    low = manifest.get("title", "").lower()
+    if "sell" in low or "selling" in low or "for sale" in low:
+        return None  # caller will use home for sale pool
+    if "renewal" in low or "payment shock" in low:
+        return "mortgage advisor couple office"
+    return "mortgage advisor professional office"
 
 
 # ---------------------------------------------------------------------------
@@ -178,13 +197,22 @@ def run_phase2():
     # 1. Feature background (shared by feature image, banners, GMB)
     # -----------------------------------------------------------------------
     print("\n[1] Feature / Banner / GMB background")
-    feature_query  = _pexels_query_for_feature(manifest["title"])
     feature_bg_path = str(GENERATED_DIR / "feature_bg.png")
 
-    if Path(feature_bg_path).exists():
+    if _is_selling_article(manifest["title"]):
+        # Selling articles: always use the prebuilt home for sale pool
+        pool_files = glob_mod.glob(_HOME_FOR_SALE_POOL)
+        if not pool_files:
+            raise FileNotFoundError(f"No images found in home for sale pool: {_HOME_FOR_SALE_POOL}")
+        chosen = random.choice(pool_files)
+        print(f"  Selling article — using home for sale pool: {os.path.basename(chosen)}")
+        feature_bg = Image.open(chosen).convert("RGB")
+        _save(feature_bg, feature_bg_path)
+    elif Path(feature_bg_path).exists():
         print(f"  Reusing cached: {feature_bg_path}")
         feature_bg = Image.open(feature_bg_path).convert("RGB")
     else:
+        feature_query = _pexels_query_for_feature(manifest["title"])
         feature_bg = _fetch_pexels(feature_query, pexels_key, "feature background")
         _save(feature_bg, feature_bg_path)
         time.sleep(1)
@@ -204,16 +232,27 @@ def run_phase2():
         filename = entry["filename"]
         prompt   = entry["prompt"]
 
-        if prompt is None:
-            print(f"  Section {sec_num}: skipped (bottom-line/FAQ uses reusable images)")
-            continue
-
         section = next(
             (s for s in manifest["h2_sections"] if s["section_number"] == sec_num), {}
         )
-        query    = _pexels_query_for_section(section)
         base     = filename.replace(".png", "")
         out_path = str(GENERATED_DIR / f"{base}.png")
+
+        if section.get("is_bottom_line"):
+            query = _pexels_query_for_bottom_line(manifest)
+            if query is None:
+                # Selling article — use home for sale pool for bottom-line too
+                print(f"  Section {sec_num} (bottom-line): using home for sale pool")
+                continue
+        elif section.get("is_faq"):
+            # FAQ always uses the reusable pool images — never fetch or generate
+            print(f"  Section {sec_num}: FAQ — using pool image (no fetch)")
+            continue
+        elif prompt is None:
+            print(f"  Section {sec_num}: skipped")
+            continue
+        else:
+            query = _pexels_query_for_section(section)
 
         if Path(out_path).exists():
             print(f"  Section {sec_num}: reusing cached {os.path.basename(out_path)}")
@@ -260,13 +299,14 @@ def _composite_phase2(manifest: dict, feature_bg: Image.Image, article_bgs: dict
     mobile_overlay        = str(REF_DIR / "BLOG POST - Banner Images" / "MOBILE - Title of Article - Overlay.png")
     gmb_overlay_dir       = str(REF_DIR / "BLOG RESHARE - GMB - POST ONLY- IMAGES TEMPLATE")
     font_archivo          = str(REF_DIR / "(2) Newsletter Image Creation - Use for process creation reference" / "(1) Banner Images" / "fonts" / "Archivo_Black" / "ArchivoBlack-Regular.ttf")
-    font_aleo             = str(SCRIPT_DIR / "fonts" / "Aleo" / "static" / "Aleo-SemiBold.ttf")
-    font_opensans         = str(SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-SemiBold.ttf")
+    font_aleo             = str(SCRIPT_DIR / "fonts" / "Aleo" / "static" / "Aleo-Bold.ttf")
+    font_opensans         = str(SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-Regular.ttf")
+    font_opensans_bold    = str(SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-Bold.ttf")
 
     article_title    = manifest["title"]
     title_line_count = manifest.get("title_line_count", 2)
     safe_title       = sanitize_filename(article_title)
-    theme_label      = _derive_theme_label(article_title)
+    theme_label      = _derive_theme_label(manifest)
 
     dirs               = create_output_folder_structure(str(SCRIPT_DIR / "out"), article_title)
     root_dir           = dirs["root"]
@@ -282,17 +322,35 @@ def _composite_phase2(manifest: dict, feature_bg: Image.Image, article_bgs: dict
         out_path = os.path.join(article_images_dir, filename)
 
         if section["is_bottom_line"]:
-            compose_bottom_line_image(
-                bottom_line_pool_pattern=bottom_line_pool,
-                overlay_path=bottom_line_overlay,
-                out_path=out_path,
-            )
+            bg = article_bgs.get(sec_num)
+            if bg is not None:
+                from src.compositors.shared import resize_and_center_crop, apply_overlay, save_rgb, verify_dimensions
+                canvas = resize_and_center_crop(bg, 1920, 1080)
+                canvas = apply_overlay(canvas, bottom_line_overlay)
+                save_rgb(canvas, out_path)
+                verify_dimensions(out_path, 1920, 1080)
+                print(f"\n  Bottom-line (Pexels bg): {os.path.basename(out_path)}")
+            elif _is_selling_article(manifest.get("title", "")):
+                # Selling article — use home for sale pool for bottom-line
+                pool_files = glob_mod.glob(_HOME_FOR_SALE_POOL)
+                if pool_files:
+                    chosen = random.choice(pool_files)
+                    from src.compositors.shared import resize_and_center_crop, apply_overlay, save_rgb, verify_dimensions
+                    bg_pool = Image.open(chosen).convert("RGB")
+                    canvas = resize_and_center_crop(bg_pool, 1920, 1080)
+                    canvas = apply_overlay(canvas, bottom_line_overlay)
+                    save_rgb(canvas, out_path)
+                    verify_dimensions(out_path, 1920, 1080)
+                    print(f"\n  Bottom-line (home for sale pool): {os.path.basename(out_path)}")
+            else:
+                compose_bottom_line_image(
+                    bottom_line_pool_pattern=bottom_line_pool,
+                    overlay_path=bottom_line_overlay,
+                    out_path=out_path,
+                )
         elif section["is_faq"]:
             compose_faq_image(
-                h2_text=text,
                 faq_pool_pattern=faq_pool,
-                overlay_path=article_overlay,
-                font_path=font_archivo,
                 out_path=out_path,
             )
         else:
@@ -315,7 +373,7 @@ def _composite_phase2(manifest: dict, feature_bg: Image.Image, article_bgs: dict
         overlay_2line_path=feature_overlay_2line,
         overlay_3line_path=feature_overlay_3line,
         aleo_font_path=font_aleo,
-        opensans_font_path=font_opensans,
+        opensans_font_path=font_opensans_bold,
         out_dir=root_dir,
         article_title_safe=safe_title,
     )
@@ -337,7 +395,7 @@ def _composite_phase2(manifest: dict, feature_bg: Image.Image, article_bgs: dict
         title=article_title,
         background=feature_bg,
         gmb_overlay_dir=gmb_overlay_dir,
-        font_path=font_archivo,
+        font_path=font_opensans_bold,
         out_dir=gmb_dir,
         article_title_safe=safe_title,
         cities=gmb_cities,

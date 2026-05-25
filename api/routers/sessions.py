@@ -5,12 +5,16 @@ sessions.py — Session management router for the AskRoss Blog Image API.
 from __future__ import annotations
 
 import asyncio
+import glob as glob_mod
 import json
 import os
+import random
 import uuid
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import AsyncGenerator, Optional
+
+from PIL import Image
 
 from fastapi import APIRouter, HTTPException
 from fastapi.responses import StreamingResponse
@@ -19,9 +23,14 @@ from sse_starlette.sse import EventSourceResponse
 from ..models import ArticleSubmission, RegenRequest, SectionUpdate, SessionResponse
 from ..pipeline import (
     PARENT,
+    REF_DIR,
+    HOME_FOR_SALE_POOL,
+    FONT_ALEO,
+    FONT_OPENSANS_BOLD,
     build_prompts_for_manifest,
     composite_section,
     create_zip_package,
+    derive_theme_label,
     extract_manifest,
     fetch_pexels_random,
     generate_section_background,
@@ -814,6 +823,7 @@ async def save_section_to_pool(session_id: str, section_number: int, body: dict 
         raise HTTPException(status_code=404, detail=f"Section {section_number} not found")
 
     image_type = body.get("image_type", "background")
+    category = body.get("category", "")
 
     if image_type == "pexels_bg":
         src_rel = sec.get("pexels_background_path")
@@ -850,6 +860,7 @@ async def save_section_to_pool(session_id: str, section_number: int, body: dict 
         "filename":    dest.name,
         "url":         f"/files/assets/pool_images/{dest.name}",
         "tags":        tags,
+        "category":    category,
         "usage_count": 0,
         "created_at":  _now_iso(),
     }
@@ -890,3 +901,334 @@ async def download_session_images(session_id: str, approved_only: bool = False):
         media_type="application/zip",
         headers={"Content-Disposition": f'attachment; filename="AskRoss_{title_safe}.zip"'},
     )
+
+
+# ---------------------------------------------------------------------------
+# Publication overlay / asset paths (mirrors run.py ASSET_PATHS)
+# ---------------------------------------------------------------------------
+
+_FEATURE_OVERLAY_2LINE  = str(REF_DIR / "BLOG POST - Feature Image" / "Feature image - Use this is title is two lines - overlay.png")
+_FEATURE_OVERLAY_3LINE  = str(REF_DIR / "BLOG POST - Feature Image" / "Feature image - use this if title is three lines - overlay.png")
+_DESKTOP_BANNER_OVERLAY = str(REF_DIR / "BLOG POST - Banner Images" / "Banner - Title of Article - Overlay.png")
+_MOBILE_BANNER_OVERLAY  = str(REF_DIR / "BLOG POST - Banner Images" / "MOBILE - Title of Article - Overlay.png")
+_GMB_OVERLAY_DIR        = str(REF_DIR / "BLOG RESHARE - GMB - POST ONLY- IMAGES TEMPLATE")
+
+
+# ---------------------------------------------------------------------------
+# GET /sessions/{id}/publication — return cached publication images
+# ---------------------------------------------------------------------------
+
+@router.get("/{session_id}/publication")
+async def get_publication_images(session_id: str):
+    session = get_session(session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+    pub = session.get("publication")
+    if not pub:
+        return {
+            "feature_url": None,
+            "banner_desktop_url": None,
+            "banner_mobile_url": None,
+            "gmb_urls": [],
+            "feature_bg_url": None,
+            "feature_prompt": None,
+        }
+    return pub
+
+
+# ---------------------------------------------------------------------------
+# POST /sessions/{id}/publication — generate feature / banner / mobile / GMB
+# ---------------------------------------------------------------------------
+
+@router.post("/{session_id}/publication")
+async def generate_publication_images(session_id: str):
+    """Generate feature image, desktop banner, mobile image, and GMB images for a session."""
+    from src.compositors.shared import sanitize_filename
+
+    session = get_session(session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    load_env()
+    api_key = os.environ.get("OPENROUTER_IMAGE_API_KEY", "")
+    if not api_key:
+        raise HTTPException(status_code=500, detail="OPENROUTER_IMAGE_API_KEY not set")
+
+    title      = session.get("article_title", "")
+    is_selling = session.get("is_selling_article", False)
+    manifest   = session.get("manifest", {})
+
+    pub_dir = SESSIONS_DIR / session_id / "publication"
+    pub_dir.mkdir(parents=True, exist_ok=True)
+
+
+    def _rel(path: str) -> str:
+        return str(Path(path).relative_to(SESSIONS_DIR)).replace("\\", "/")
+
+    def _url(rel: str) -> str:
+        return f"/files/sessions/{rel}"
+
+    # ── 1. Generate feature background ────────────────────────────────────────
+    try:
+        from generate_gemini import _prompt_for_feature, _generate_image, _is_selling_article as _gemini_is_selling
+    except ImportError as e:
+        raise HTTPException(status_code=500, detail=f"Cannot import pipeline: {e}")
+
+    feature_bg_path = str(pub_dir / "feature_bg.png")
+    feature_prompt_used = ""
+
+    if is_selling or _gemini_is_selling(title):
+        pool_files = glob_mod.glob(HOME_FOR_SALE_POOL)
+        if not pool_files:
+            raise HTTPException(status_code=500, detail="No home-for-sale pool images found")
+        chosen = random.choice(pool_files)
+        feature_bg_img = Image.open(chosen).convert("RGB")
+        feature_bg_img.save(feature_bg_path, "PNG")
+        feature_prompt_used = "home-for-sale pool"
+    else:
+        theme_label    = derive_theme_label(manifest)
+        feature_prompt = _prompt_for_feature(title, theme_label)
+
+        if feature_prompt is None:
+            # selling article caught by _prompt_for_feature — use pool
+            pool_files = glob_mod.glob(HOME_FOR_SALE_POOL)
+            if not pool_files:
+                raise HTTPException(status_code=500, detail="No home-for-sale pool images found")
+            chosen = random.choice(pool_files)
+            feature_bg_img = Image.open(chosen).convert("RGB")
+            feature_bg_img.save(feature_bg_path, "PNG")
+            feature_prompt_used = "pool fallback"
+        else:
+            feature_bg_img = await asyncio.to_thread(_generate_image, feature_prompt, api_key, "feature background")
+            if feature_bg_img is None:
+                raise HTTPException(
+                    status_code=500,
+                    detail="Feature background generation failed (filtered by model)",
+                )
+            feature_bg_img.save(feature_bg_path, "PNG")
+            feature_prompt_used = feature_prompt[:120]
+
+    import shutil as _shutil
+
+    # Use a temp subdir for compositor output (may have special chars in names)
+    tmp_dir = str(pub_dir / "_tmp")
+    Path(tmp_dir).mkdir(parents=True, exist_ok=True)
+    safe_title = sanitize_filename(title)
+
+    # ── 2. Compose feature image (700x450) ───────────────────────────────────
+    try:
+        from src.compositors.compose_feature import compose_feature_image
+        feature_results = await asyncio.to_thread(
+            compose_feature_image,
+            title,
+            derive_theme_label(manifest),
+            feature_bg_img,
+            _FEATURE_OVERLAY_2LINE,
+            _FEATURE_OVERLAY_3LINE,
+            FONT_ALEO,
+            FONT_OPENSANS_BOLD,
+            tmp_dir,
+            safe_title,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Feature image compositing failed: {e}")
+
+    # Copy compositor output to fixed clean names (safe for HTTP serving)
+    feature_compositor_path = feature_results[1][0] if len(feature_results) >= 2 else None
+    feature_out_path = str(pub_dir / "feature.png")
+    if feature_compositor_path and Path(feature_compositor_path).exists():
+        _shutil.copy2(feature_compositor_path, feature_out_path)
+
+    # ── 3. Compose banners (1286x300 desktop + 400x600 mobile) ──────────────
+    try:
+        from src.compositors.compose_banners import compose_all_banners
+        banner_results = await asyncio.to_thread(
+            compose_all_banners,
+            feature_bg_img,
+            _DESKTOP_BANNER_OVERLAY,
+            _MOBILE_BANNER_OVERLAY,
+            tmp_dir,
+            safe_title,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Banner compositing failed: {e}")
+
+    desktop_compositor_path = banner_results[0][0] if len(banner_results) >= 1 else None
+    mobile_compositor_path  = banner_results[1][0] if len(banner_results) >= 2 else None
+    desktop_out_path = str(pub_dir / "banner_desktop.png")
+    mobile_out_path  = str(pub_dir / "banner_mobile.png")
+    if desktop_compositor_path and Path(desktop_compositor_path).exists():
+        _shutil.copy2(desktop_compositor_path, desktop_out_path)
+    if mobile_compositor_path and Path(mobile_compositor_path).exists():
+        _shutil.copy2(mobile_compositor_path, mobile_out_path)
+
+    # ── 4. Compose GMB images (1200x900 × 4 cities) ──────────────────────────
+    gmb_tmp_dir = str(pub_dir / "_tmp_gmb")
+    Path(gmb_tmp_dir).mkdir(parents=True, exist_ok=True)
+    gmb_out_dir = str(pub_dir / "gmb")
+    Path(gmb_out_dir).mkdir(parents=True, exist_ok=True)
+    gmb_urls: list = []
+    try:
+        from src.compositors.compose_gmb import compose_all_gmb_images
+        gmb_results = await asyncio.to_thread(
+            compose_all_gmb_images,
+            title,
+            feature_bg_img,
+            _GMB_OVERLAY_DIR,
+            FONT_OPENSANS_BOLD,
+            gmb_tmp_dir,
+            safe_title,
+        )
+        if isinstance(gmb_results, list):
+            for i, (path, ok) in enumerate(gmb_results):
+                if Path(path).exists():
+                    # Extract city name from compositor filename prefix (e.g. "Toronto - ...")
+                    city_slug = Path(path).stem.split(" - ")[0].strip().lower().replace(" ", "_")
+                    dest = pub_dir / "gmb" / f"{city_slug}.png"
+                    _shutil.copy2(path, str(dest))
+                    gmb_urls.append(_url(_rel(str(dest))))
+    except Exception as e:
+        # GMB failure is non-fatal
+        print(f"[WARNING] GMB compositing failed: {e}")
+
+    # ── 5. Build response ─────────────────────────────────────────────────────
+    result = {
+        "feature_bg_url":     _url(_rel(feature_bg_path))  if Path(feature_bg_path).exists() else None,
+        "feature_url":        _url(_rel(feature_out_path))  if Path(feature_out_path).exists() else None,
+        "banner_desktop_url": _url(_rel(desktop_out_path))  if Path(desktop_out_path).exists() else None,
+        "banner_mobile_url":  _url(_rel(mobile_out_path))   if Path(mobile_out_path).exists() else None,
+        "gmb_urls":           gmb_urls,
+        "feature_prompt":     feature_prompt_used,
+    }
+
+    # Persist publication URLs into session record
+    update_session(session_id, {"publication": result, "updated_at": _now_iso()})
+
+    return result
+
+
+# ---------------------------------------------------------------------------
+# POST /sessions/{id}/publication/recomposite — re-render with custom text
+# ---------------------------------------------------------------------------
+
+@router.post("/{session_id}/publication/recomposite")
+async def recomposite_publication(session_id: str, body: dict = {}):
+    """Re-composite publication images using an existing feature background but with
+    custom theme label and/or article title text. Does NOT re-generate the background."""
+    import shutil as _shutil
+    from src.compositors.shared import sanitize_filename
+
+    session = get_session(session_id)
+    if session is None:
+        raise HTTPException(status_code=404, detail="Session not found")
+
+    pub_data = session.get("publication") or {}
+    pub_dir = SESSIONS_DIR / session_id / "publication"
+
+    # The raw background must already exist
+    feature_bg_path = str(pub_dir / "feature_bg.png")
+    if not Path(feature_bg_path).exists():
+        raise HTTPException(status_code=422, detail="No feature background yet — run Generate All first")
+
+    manifest   = session.get("manifest", {})
+    orig_title = session.get("article_title", "")
+
+    custom_theme = body.get("theme") or derive_theme_label(manifest)
+    custom_title = body.get("title") or orig_title
+
+    feature_bg_img = Image.open(feature_bg_path).convert("RGB")
+    safe_title = sanitize_filename(custom_title)
+
+    tmp_dir = str(pub_dir / "_tmp")
+    Path(tmp_dir).mkdir(parents=True, exist_ok=True)
+
+    def _rel(path: str) -> str:
+        return str(Path(path).relative_to(SESSIONS_DIR)).replace("\\", "/")
+    def _url(rel: str) -> str:
+        return f"/files/sessions/{rel}"
+
+    # ── Feature image ────────────────────────────────────────────────────────
+    try:
+        from src.compositors.compose_feature import compose_feature_image
+        feature_results = await asyncio.to_thread(
+            compose_feature_image,
+            custom_title,
+            custom_theme,
+            feature_bg_img,
+            _FEATURE_OVERLAY_2LINE,
+            _FEATURE_OVERLAY_3LINE,
+            FONT_ALEO,
+            FONT_OPENSANS_BOLD,
+            tmp_dir,
+            safe_title,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Feature compositing failed: {e}")
+
+    feature_compositor_path = feature_results[1][0] if len(feature_results) >= 2 else None
+    feature_out_path = str(pub_dir / "feature.png")
+    if feature_compositor_path and Path(feature_compositor_path).exists():
+        _shutil.copy2(feature_compositor_path, feature_out_path)
+
+    # ── Banners ──────────────────────────────────────────────────────────────
+    try:
+        from src.compositors.compose_banners import compose_all_banners
+        banner_results = await asyncio.to_thread(
+            compose_all_banners,
+            feature_bg_img,
+            _DESKTOP_BANNER_OVERLAY,
+            _MOBILE_BANNER_OVERLAY,
+            tmp_dir,
+            safe_title,
+        )
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Banner compositing failed: {e}")
+
+    desktop_compositor_path = banner_results[0][0] if len(banner_results) >= 1 else None
+    mobile_compositor_path  = banner_results[1][0] if len(banner_results) >= 2 else None
+    desktop_out_path = str(pub_dir / "banner_desktop.png")
+    mobile_out_path  = str(pub_dir / "banner_mobile.png")
+    if desktop_compositor_path and Path(desktop_compositor_path).exists():
+        _shutil.copy2(desktop_compositor_path, desktop_out_path)
+    if mobile_compositor_path and Path(mobile_compositor_path).exists():
+        _shutil.copy2(mobile_compositor_path, mobile_out_path)
+
+    # ── GMB ──────────────────────────────────────────────────────────────────
+    gmb_tmp_dir = str(pub_dir / "_tmp_gmb")
+    Path(gmb_tmp_dir).mkdir(parents=True, exist_ok=True)
+    gmb_out_dir = str(pub_dir / "gmb")
+    Path(gmb_out_dir).mkdir(parents=True, exist_ok=True)
+    gmb_urls: list = []
+    try:
+        from src.compositors.compose_gmb import compose_all_gmb_images
+        gmb_results = await asyncio.to_thread(
+            compose_all_gmb_images,
+            custom_title,
+            feature_bg_img,
+            _GMB_OVERLAY_DIR,
+            FONT_OPENSANS_BOLD,
+            gmb_tmp_dir,
+            safe_title,
+        )
+        if isinstance(gmb_results, list):
+            for path, ok in gmb_results:
+                if Path(path).exists():
+                    city_slug = Path(path).stem.split(" - ")[0].strip().lower().replace(" ", "_")
+                    dest = pub_dir / "gmb" / f"{city_slug}.png"
+                    _shutil.copy2(path, str(dest))
+                    gmb_urls.append(_url(_rel(str(dest))))
+    except Exception as e:
+        print(f"[WARNING] GMB recomposite failed: {e}")
+
+    result = {
+        "feature_bg_url":     pub_data.get("feature_bg_url"),
+        "feature_url":        _url(_rel(feature_out_path))  if Path(feature_out_path).exists() else None,
+        "banner_desktop_url": _url(_rel(desktop_out_path))  if Path(desktop_out_path).exists() else None,
+        "banner_mobile_url":  _url(_rel(mobile_out_path))   if Path(mobile_out_path).exists() else None,
+        "gmb_urls":           gmb_urls or pub_data.get("gmb_urls", []),
+        "feature_prompt":     pub_data.get("feature_prompt"),
+        "custom_theme":       custom_theme,
+        "custom_title":       custom_title,
+    }
+    update_session(session_id, {"publication": result, "updated_at": _now_iso()})
+    return result

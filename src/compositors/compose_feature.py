@@ -7,16 +7,15 @@ Produces two files:
 
 Two text layers (rendered after overlay):
   Layer 1 — THEME (topic label)
-    Font:     Aleo SemiBold ~16px
-    Position: x=138, y=276  (below logo/red-bar design element)
-    Max width: 560px
+    Font:     Aleo SemiBold, ALL CAPS, ~20px, 1px letter spacing
+    Position: x=138, y=276
 
   Layer 2 — MAIN TITLE
-    Font:     Open Sans Bold, ALL CAPS
-    Size:     auto-fit 28→14px
-    Position: x=138, y=306 (2-line overlay) or y=286 (3-line overlay)
+    Font:     Open Sans Bold 700, ALL CAPS, 1px letter spacing, 1.3× line height
+    Size:     auto-fit 35→14px (width + height constrained)
+    Position: x=137, dynamically placed just below theme text
     Max width: 560px
-    Line height: font_size + 10px
+    Overlay selected automatically based on actual wrap line count.
 """
 
 import os
@@ -27,6 +26,7 @@ from .shared import (
     apply_overlay,
     draw_text_with_shadow,
     fit_font_size,
+    prevent_widow,
     resize_and_center_crop,
     save_rgb,
     sanitize_filename,
@@ -37,27 +37,33 @@ from .shared import (
 CANVAS_W = 700
 CANVAS_H = 450
 
-# Theme text — Aleo SemiBold
-THEME_X         = 138
-THEME_Y         = 276
-THEME_MAX_WIDTH = 560
-THEME_START_SIZE = 20
-THEME_MIN_SIZE   = 12
+# Theme text — Aleo SemiBold, ALL CAPS
+THEME_X              = 138
+THEME_Y              = 280
+THEME_MAX_WIDTH      = 560
+THEME_START_SIZE     = 13
+THEME_MIN_SIZE       = 8
+THEME_LETTER_SPACING = 1
+THEME_LINE_GAP       = 6    # px between theme bottom and title top (title_y = 280+13+6 = 299)
 
-# Title text — Open Sans ExtraBold, ALL CAPS
-TITLE_X_2LINE   = 138
-TITLE_Y_2LINE   = 303   # for 2-line overlay
-TITLE_Y_3LINE   = 283   # for 3-line overlay (10px higher to accommodate extra line)
-TITLE_MAX_WIDTH = 560
-TITLE_START_SIZE = 28
-TITLE_MIN_SIZE   = 14
-TITLE_MAX_LINES  = 3    # never allow 4+ lines
+# Title text — Open Sans Bold 700, ALL CAPS (same style as GMB template)
+TITLE_X              = 138
+TITLE_MAX_WIDTH      = 440  # forces "BEFORE" as line-1 break point at 20px Bold, 0px spacing
+TITLE_START_SIZE     = 20   # user-specified target size
+TITLE_MIN_SIZE       = 14
+TITLE_MAX_LINES      = 3
+TITLE_LETTER_SPACING = 0
+TITLE_LINE_HEIGHT_RATIO = 1.3
+
+# Bottom of the overlay text zone (top edge of bottom red bar) per overlay type
+# Used to enforce a height budget so title never overflows the template.
+TEXT_ZONE_BOTTOM_2LINE = 360
+TEXT_ZONE_BOTTOM_3LINE = 390
 
 
 def compose_feature_image(
     title: str,
     theme_label: str,
-    title_line_count: int,
     background: Image.Image,
     overlay_2line_path: str,
     overlay_3line_path: str,
@@ -65,18 +71,18 @@ def compose_feature_image(
     opensans_font_path: str,
     out_dir: str,
     article_title_safe: str,
+    title_line_count: int = None,  # ignored — overlay auto-selected from actual wrap
 ) -> list:
     """Build the feature image (700x450) and save the raw background.
 
     Args:
         title:              H1 article title text (will be uppercased for rendering).
-        theme_label:        Short 2-4 word topic label (e.g. "Mortgage Rates").
-        title_line_count:   Manifest value — 2 or 3, selects overlay.
+        theme_label:        Short 2-4 word topic label (e.g. "Housing News").
         background:         Background PIL Image (any size).
         overlay_2line_path: Path to 2-line title overlay PNG.
         overlay_3line_path: Path to 3-line title overlay PNG.
         aleo_font_path:     Path to Aleo-SemiBold.ttf.
-        opensans_font_path: Path to OpenSans-ExtraBold.ttf.
+        opensans_font_path: Path to OpenSans-Bold.ttf.
         out_dir:            Output directory.
         article_title_safe: Sanitized article title for filenames.
 
@@ -99,40 +105,20 @@ def compose_feature_image(
     save_rgb(canvas, raw_path)
     results.append((raw_path, verify_dimensions(raw_path, CANVAS_W, CANVAS_H)))
 
-    # 3. Select overlay based on line count
-    if title_line_count >= 3:
-        overlay_path = overlay_3line_path
-        title_y      = TITLE_Y_3LINE
-        print(f"    3-line overlay (title_line_count={title_line_count})")
-    else:
-        overlay_path = overlay_2line_path
-        title_y      = TITLE_Y_2LINE
-        print(f"    2-line overlay (title_line_count={title_line_count})")
-
-    # 4. Apply overlay
-    canvas = apply_overlay(canvas, overlay_path)
-
-    # 5. Theme text — Aleo SemiBold, auto-fit to 1 line
+    # 3. Fit theme first — its height determines where the title starts
+    theme_upper = theme_label.upper()
     theme_font, theme_lines = fit_font_size(
-        text=theme_label,
+        text=theme_upper,
         font_path=aleo_font_path,
         max_width=THEME_MAX_WIDTH,
         max_lines=1,
         start_size=THEME_START_SIZE,
         min_size=THEME_MIN_SIZE,
+        letter_spacing=THEME_LETTER_SPACING,
     )
-    print(f"    Theme: '{theme_label}' at {theme_font.size}px Aleo")
-    canvas = draw_text_with_shadow(
-        canvas=canvas,
-        lines=theme_lines,
-        font=theme_font,
-        text_x=THEME_X,
-        text_y=THEME_Y,
-        line_height=theme_font.size + 4,
-        align="left",
-    )
+    title_y = THEME_Y + theme_font.size + THEME_LINE_GAP
 
-    # 6. Title text — Open Sans ExtraBold, ALL CAPS
+    # 4. Fit title for width/line count
     title_upper = title.upper()
     title_font, title_lines = fit_font_size(
         text=title_upper,
@@ -141,20 +127,69 @@ def compose_feature_image(
         max_lines=TITLE_MAX_LINES,
         start_size=TITLE_START_SIZE,
         min_size=TITLE_MIN_SIZE,
+        letter_spacing=TITLE_LETTER_SPACING,
     )
-    title_line_height = title_font.size + 10
-    print(f"    Title: {len(title_lines)} lines at {title_font.size}px Open Sans Bold")
+    title_lines = prevent_widow(title_lines, title_font, TITLE_MAX_WIDTH, TITLE_LETTER_SPACING)
+    actual_lines = len(title_lines)
+
+    # 5. Apply height budget, then select overlay from final line count
+    #    Loop once: budget may reduce line count → different overlay → slightly different budget
+    for _pass in range(2):
+        zone_bottom = TEXT_ZONE_BOTTOM_3LINE if actual_lines >= 3 else TEXT_ZONE_BOTTOM_2LINE
+        available_h = zone_bottom - title_y - 4   # 4px safety margin
+        max_size_h  = int(available_h / ((actual_lines - 1) * TITLE_LINE_HEIGHT_RATIO + 1))
+        if title_font.size > max_size_h:
+            title_font, title_lines = fit_font_size(
+                text=title_upper,
+                font_path=opensans_font_path,
+                max_width=TITLE_MAX_WIDTH,
+                max_lines=TITLE_MAX_LINES,
+                start_size=max_size_h,
+                min_size=TITLE_MIN_SIZE,
+                letter_spacing=TITLE_LETTER_SPACING,
+            )
+            title_lines = prevent_widow(title_lines, title_font, TITLE_MAX_WIDTH, TITLE_LETTER_SPACING)
+            actual_lines = len(title_lines)
+
+    if actual_lines >= 3:
+        overlay_path = overlay_3line_path
+        print(f"    3-line overlay (actual lines={actual_lines})")
+    else:
+        overlay_path = overlay_2line_path
+        print(f"    2-line overlay (actual lines={actual_lines})")
+
+    # 6. Apply overlay
+    canvas = apply_overlay(canvas, overlay_path)
+
+    # 7. Theme text
+    print(f"    Theme: '{theme_upper}' at {theme_font.size}px Aleo")
+    canvas = draw_text_with_shadow(
+        canvas=canvas,
+        lines=theme_lines,
+        font=theme_font,
+        text_x=THEME_X,
+        text_y=THEME_Y,
+        line_height=theme_font.size + 4,
+        align="left",
+        letter_spacing=THEME_LETTER_SPACING,
+    )
+
+    # 8. Title text
+    title_line_height = int(title_font.size * TITLE_LINE_HEIGHT_RATIO)
+    print(f"    Title: {actual_lines} lines at {title_font.size}px Open Sans Bold, "
+          f"line_height={title_line_height}px, title_y={title_y}")
     canvas = draw_text_with_shadow(
         canvas=canvas,
         lines=title_lines,
         font=title_font,
-        text_x=TITLE_X_2LINE,
+        text_x=TITLE_X,
         text_y=title_y,
         line_height=title_line_height,
         align="left",
+        letter_spacing=TITLE_LETTER_SPACING,
     )
 
-    # 7. Save final
+    # 9. Save final
     save_rgb(canvas, final_path)
     results.append((final_path, verify_dimensions(final_path, CANVAS_W, CANVAS_H)))
 

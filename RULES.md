@@ -6,6 +6,47 @@
 
 ---
 
+## Locked-in Template Summary (do not deviate without user re-approval)
+
+| Image type | Canvas | Font | Size | Key rule |
+|---|---|---|---|---|
+| Large Article Image | 1920×1080 | Archivo Black | 60px | Auto text position via luminance |
+| Feature Image — Theme | 700×450 | Aleo Bold | 13px ALL CAPS | 1px letter spacing, x=138, y=280 |
+| Feature Image — Title | 700×450 | Open Sans Bold 700 | 20px ALL CAPS | 0px spacing, 1.3× line height, max 440px, y=299 |
+| Desktop Banner | 1286×300 | — | — | NO TEXT, photo only |
+| Mobile Banner | 400×600 | — | — | NO TEXT, photo only |
+| GMB Share Image | 1200×900 | Open Sans Bold 700 | 35px ALL CAPS | 1px letter spacing, 1.3× line height, max 850px |
+
+**Universal typography rules:**
+- Top line of any title must be longer than the second line
+- Never a single word on the last line (widow prevention — enforced in code automatically)
+- Overlays must be semi-transparent so real photo backgrounds show through
+
+---
+
+## Theme Label Derivation Process (Feature Image)
+
+The theme label appears above the article title on the Feature image (e.g. "HOUSING NEWS").
+
+**Priority order:**
+1. **Set explicitly in `manifest.json`** as `"theme_label": "Housing News"` — always wins. This is the required step when parsing a new article.
+2. **Keyword fallback** in `_derive_theme_label()` (`run.py`) — used only if manifest has no theme_label:
+   - "Bank of Canada" / "interest rate" / "rate cut" / "rate hike" → **Mortgage Rates**
+   - "renew" / "renewal" / "payment shock" → **Renewal Tips**
+   - "refinanc" / "heloc" / "equity" → **Refinancing**
+   - "buy" / "buyer" / "first-time" / "purchase" → **Buyer's Guide**
+   - "credit" / "debt" / "financial reset" / "budget" → **Financial Advice**
+   - "market" / "home price" / "recovery" / "crash" → **Market Update**
+   - Everything else → **Housing News**
+
+**How to choose the right theme:**
+- Read the full article, not just the title
+- Identify the primary trend or category being addressed
+- Use 2 words max (e.g. "Housing News", "Mortgage Rates", "Market Update")
+- Theme is always rendered ALL CAPS regardless of how it is stored
+
+---
+
 ## File paths (after folder reorganisation)
 
 All overlay templates are now inside `references/`:
@@ -34,9 +75,10 @@ references/BLOG POST - Large Article Images for Askross.ca/Reusable Image Large 
 
 | Font | File | Used for |
 |---|---|---|
-| Aleo SemiBold | `fonts/Aleo/static/Aleo-SemiBold.ttf` | Feature image THEME text |
-| Open Sans ExtraBold | `fonts/Open_Sans/static/OpenSans-ExtraBold.ttf` | Feature image TITLE text (ALL CAPS) |
-| Archivo Black | `references/(2) Newsletter Image Creation - Use for process creation reference/(1) Banner Images/fonts/Archivo_Black/ArchivoBlack-Regular.ttf` | Large article images |
+| Aleo Bold | `fonts/Aleo/static/Aleo-Bold.ttf` | Feature image THEME text |
+| Open Sans Bold (700) | `fonts/Open_Sans/static/OpenSans-Bold.ttf` | Feature image TITLE + GMB title (ALL CAPS) |
+| Open Sans Regular (400) | `fonts/Open_Sans/static/OpenSans-Regular.ttf` | Reserved / unused currently |
+| Archivo Black | `references/(2) Newsletter Image Creation - Use for process creation reference/(1) Banner Images/fonts/Archivo_Black/ArchivoBlack-Regular.ttf` | Large article images (H2 titles) |
 
 ---
 
@@ -66,65 +108,98 @@ references/BLOG POST - Large Article Images for Askross.ca/Reusable Image Large 
 FONT_SIZE        = 60
 TEXT_LINE_HEIGHT = 75     # 60 + 15 leading
 TEXT_LEFT_MARGIN = 227    # just right of logo box (logo spans x=24–217)
-TEXT_MAX_WIDTH_LEFT   = 1400   # left-aligned positions (upper-left, lower-left)
-TEXT_MAX_WIDTH_CENTER = 1500   # center position
+TEXT_MAX_WIDTH_LEFT   = 1300   # left-aligned positions — forces 2-line wrap on most H2 titles ✅ updated 2026-05-21
+TEXT_MAX_WIDTH_CENTER = 1400   # center position — forces 2-line wrap on most H2 titles ✅ updated 2026-05-21
 UPPER_LEFT_Y          = 284    # y=213 in newsletter × 1080/800 = 288 → 284
 LOWER_LEFT_BOTTOM_PAD = 189    # 140 × 1080/800 — text_y≈700 for 2 lines
 ```
+
+**Alternating text positions (locked in 2026-05-21):**
+- Regular H2 sections alternate position by index (0-based):
+  - Even index (0, 2, 4, 6…) → `force_position="lower-left"`
+  - Odd index (1, 3, 5, 7…) → `force_position="center"`
+- Use `compose_article_image(force_position=...)` — bypasses luminance analysis entirely
+- Bottom-line and FAQ sections are exempt (they follow their own rules)
+- Prevents consecutive same-position layouts that look repetitive
+
+**Center text Y offset (locked in 2026-05-21):**
+- Mathematical center: `text_y = (1080 - num_lines * 75) // 2 = 465` for 2 lines
+- Visually the text reads as too high — apply +5px offset → `text_y = 470`
+- This is applied whenever `force_position="center"` is used
 
 **Auto text position (luminance analysis — same as newsletter):**
 - Measure average luminance in 3 zones: upper-left, lower-left, center
 - Pick the darkest zone → best contrast for white text
 - Faces rule: text must NEVER overlap a face
+- Only used when `force_position=None` (i.e. luminance mode, not alternating mode)
+
+**Title wrapping rules (never break):**
+- Prefer **2-line wrapping** for most H2 titles. The max-width constants above are calibrated to achieve this.
+- Top line must be longer than or equal to the second line (natural with greedy word wrap)
+- No single word on the last line — widow prevention enforced in code
+- NEVER place text where it would cover a person's face. Luminance-based position selection avoids this for images where faces are in one zone; if the chosen zone has a face, prefer the next-darkest zone.
+
+**Context rule (never break):**
+- Background images must be contextually relevant to the H2 topic.
+- Do NOT use a generic filler image when a more specific and relevant image exists.
+- Example: an H2 about equity loss → sinking house or empty piggy bank, NOT a random home exterior.
+- Example: an H2 about selling your home → home with FOR SALE sign or family in front of home listed for sale.
 
 **Bottom-line H2 variant:**
-- Background: random pick from `Reusable Image Large Article Image Assets/AskRoss.ca - Bottom line or Advice from Ross Taylor Mortgages*.png`
+- Background: pool images from `Reusable Image Large Article Image Assets/AskRoss.ca - Bottom line or Advice from Ross Taylor Mortgages*.png` are used for Phase 1 test only.
+- **Phase 2 rule:** generate or fetch a contextually relevant background that matches the article topic. If the article is about selling a home, use an image of a home with a for sale sign or a family making a selling decision — NOT a generic advisor image that doesn't match the article context.
 - Apply overlay: `(8) Rule - AskRoss.ca - For The Closer - No Overlay - Just Logo.png` (logo only, no scrim)
 - **NO TEXT rendered — ever. Logo only.**
 
 **FAQ H2 variant:**
-- Background: random pick from `Reusable Image Large Article Image Assets/AskRoss.ca - All of the FAQs in this article*.png`
-- Apply overlay: `(1) AskRoss.ca - Just logo and grey overlay.png` (standard)
-- **Render H2 title text** (same typography as regular article images)
+- **ALWAYS** pick one of the two fixed pool images — never generate with Gemini, never fetch from Pexels:
+  - `Reusable Image Large Article Image Assets/AskRoss.ca - All of the FAQs in this article.png`
+  - `Reusable Image Large Article Image Assets/AskRoss.ca - All of the FAQs in this article (2).png`
+- **NO overlay applied** — pool images are the complete deliverable. Just resize to 1920×1080 and save.
+- **NO TEXT rendered — ever.**
 
 ---
 
-### 2. Feature Image — 700×450
+### 2. Feature Image — 700×450  ✅ LOCKED IN 2026-05-20
 
 **Compositing steps:**
 1. Resize/center-crop background image to 700×450
-2. Save as `{title} - Feature Background RAW.png` (NO overlay — this is the reusable asset)
-3. Apply overlay (2-line or 3-line depending on `title_line_count`)
-4. Render TWO text layers
+2. Save as `{title} - Feature Background RAW.png` (NO overlay — reusable asset)
+3. Fit title text first → actual line count drives overlay selection automatically
+4. Apply overlay (auto-selected: 2-line or 3-line)
+5. Render Layer 1 (THEME), then Layer 2 (TITLE)
 
-**Overlay selection:**
-- `title_line_count == 2` → use `Feature image - Use this is title is two lines - overlay.png`
-- `title_line_count >= 3` → use `Feature image - use this if title is three lines - overlay.png`
-
-**The overlay provides:** uniform 39% dark scrim + AskRoss.ca logo circle at x≈138–160, y=229–239, and red accent bar at y≈261–264
-
-**TWO text layers (rendered after overlay):**
+**Overlay selection (automatic — never use manifest title_line_count):**
+- Fit title → actual lines ≤ 2 → 2-line overlay
+- Fit title → actual lines = 3 → 3-line overlay
+- Height budget enforced: font auto-reduces so text never overflows bottom red bar
 
 **Layer 1 — THEME (topic label):**
-- Font: **Aleo SemiBold** (`fonts/Aleo/static/Aleo-SemiBold.ttf`)
-- Size: **~16px** (auto-fit to max 2 words / short label)
-- Color: white #FFFFFF
-- Position: left-aligned at **x=138, y=276** (just below the logo/red-bar design element)
+- Font: **Aleo Bold** (`fonts/Aleo/static/Aleo-Bold.ttf`)
+- Size: **13px** (auto-fits down if label too long)
+- Case: **ALL CAPS**
+- Letter spacing: **1px**
+- Position: x=138, y=280
 - Max width: 560px
-- Content: a short 2–4 word topic label derived from the article (e.g. "Mortgage Rates", "Bank of Canada", "Home Equity", "Selling Your Home")
+- Content: set via `manifest["theme_label"]` (e.g. "Housing News"). Fallback keyword categories: Mortgage Rates, Renewal Tips, Refinancing, Buyer's Guide, Financial Advice, Market Update, Housing News.
 
 **Layer 2 — MAIN TITLE:**
-- Font: **Open Sans ExtraBold** (`fonts/Open_Sans/static/OpenSans-ExtraBold.ttf`)
-- Case: **ALL CAPS** (`.upper()`)
-- Size: **~22px** (auto-fit: try sizes 28→14 until text fits in max_width)
-- Color: white #FFFFFF
-- Position: left-aligned at **x=138, y=306** (for 2-line overlay)
-- Max width: 560px
-- Line height: size + 10px
-- For 3-line overlay: y=286 (10px higher to accommodate extra line)
+- Font: **Open Sans Bold 700** (`fonts/Open_Sans/static/OpenSans-Bold.ttf`)
+- Case: **ALL CAPS**
+- Letter spacing: **0px**
+- Size: **20px start** (auto-fits down for both width AND height budget)
+- Line height: **1.3× font size**
+- Position: x=138, y=299 (dynamic: THEME_Y + theme_font.size + 6px gap)
+- Max width: **440px**
+- Max lines: 3
 
-**Title line count logic:**
-Measure how many lines the MAIN TITLE wraps to at max_width=560px and the chosen font size. If ≤2 lines → use 2-line overlay. If 3 lines → use 3-line overlay. Never allow 4+ lines — reduce font size until it fits in 3 lines.
+**Typography rules (never break):**
+- Top line must be longer than the second line
+- No single word on the last line (widow prevention enforced in code)
+
+**Height budget zones:**
+- 2-line overlay: text zone bottom = y≈360
+- 3-line overlay: text zone bottom = y≈390
 
 ---
 
@@ -137,6 +212,25 @@ Measure how many lines the MAIN TITLE wraps to at max_width=560px and the chosen
 
 The banner overlay is a pure uniform scrim with no embedded design elements (confirmed by pixel inspection: no alpha variation). The banner communicates through the photograph alone.
 
+**Crop math for 1920×1080 source:**
+- Scale to fit width: `new_w=1286, new_h=723`
+- Default center crop: `top=211` (rows 211–511 of 723)
+- Valid range: `top=0` (very top) to `top=423` (very bottom)
+
+**For sign-based images (selling articles), find the sign before cropping:**
+```python
+import numpy as np
+arr = np.array(bg)
+# FOR SALE signs are red: R>150, G<80, B<80
+red_mask = (arr[:,:,0] > 150) & (arr[:,:,1] < 80) & (arr[:,:,2] < 80)
+red_per_row = red_mask.sum(axis=1)
+sign_center_original = int(np.median(np.argsort(red_per_row)[-20:]))
+scale = 723 / bg.height
+sign_center_scaled = int(sign_center_original * scale)
+top = max(0, min(sign_center_scaled - 150, 423))
+```
+- For Pool 1 (`home for sale.png`): sign detected at scaled y≈339, top=189 from detection, then +50px nudge → **top=239** was the approved final value
+
 ---
 
 ### 4. Mobile Banner — 400×600
@@ -146,34 +240,42 @@ The banner overlay is a pure uniform scrim with no embedded design elements (con
 2. Apply overlay: `MOBILE - Title of Article - Overlay.png`
 3. **NO TEXT rendered — ever.**
 
-Same rule as desktop banner. The mobile crop + overlay is the complete deliverable.
+**Crop math for 1920×1080 source:**
+- Scale to fit height: `new_h=600, new_w=1067`
+- Default center crop: `left=333` (columns 333–733 of 1067)
+- Valid range: `left=0` (far left) to `left=667` (far right)
+
+**For sign-based images:** The portrait crop (400px wide from 1067px) will cut off the sign if it's off-center horizontally. Adjust `left` to frame the sign:
+- Start at `left=667` (far right) and nudge left until sign is in frame
+- For Pool 1: `left=566` (100px left of far right) was the approved final value
 
 ---
 
-### 5. GMB Share Images — 1200×900 × 4 cities
+### 5. GMB Share Images — 1200×900 × 4 cities  ✅ LOCKED IN 2026-05-20
 
-**The overlay IS the branding.** Each city overlay (Toronto, Ottawa, Richmond Hill, Mississauga) has embedded at approximately y=456–686:
-- AskRoss.ca logo (y≈456–476, x≈236–276)
-- "AskRoss.ca" brand text (y≈482–494, x≈236–380)
-- Red accent bar (y≈512–518, x≈237–386, RGB #E00B1A)
-- City name, pre-rendered per city (y≈544–558, x≈236–422) — this is what differs between city overlays
-- Second red accent bar (y≈680–686)
+**The overlay IS the branding.** Each city overlay has embedded logo, brand text, red bars, and city name pre-rendered. The overlay must be semi-transparent so real photo backgrounds show through.
 
 **Compositing steps:**
 1. Resize/center-crop the Feature Background RAW to 1200×900
-2. Apply city overlay (alpha_composite)
+2. Apply city overlay (alpha_composite — semi-transparent)
 3. Render ARTICLE TITLE text in the title zone
 
-**Title text rendering:**
-- Font: **Archivo Black** (same as article images)
-- Size: **28px** (auto-fit to max width — try from 34 down to 18)
-- Color: white #FFFFFF
-- Position: left-aligned at **x=237, y=587**
-- Max width: **960px** (1200 - 237 - 3px right margin)
-- Line height: 40px
-- Drop shadow: same as article images (offset 1, blur 3, opacity 114)
-- Wraps to 2 lines if needed (line 2 at y=587+40=627)
-- This is the H1 ARTICLE TITLE (not an H2), rendered identically across all 4 cities
+**Title text rendering — LOCKED VALUES:**
+- Font: **Open Sans Bold 700** (`fonts/Open_Sans/static/OpenSans-Bold.ttf`)
+- Case: **ALL CAPS**
+- Size: **35px start** (auto-fits down to min 18px if title too long)
+- Letter spacing: **1px** between each character (rendered char-by-char)
+- Line height: **1.3× font size** (=45px at 35px)
+- Position: x=236, y=573
+- Max width: **850px**
+- Max lines: **2**
+- Drop shadow: offset 1px, GaussianBlur radius 3, opacity 114/255
+
+**Typography rules (never break):**
+- Top line must be longer than the second line
+- No single word on the last line (widow prevention enforced in code)
+
+**Cities:** Toronto, Ottawa, Richmond Hill, Mississauga (set via `manifest["gmb_locations"]`)
 
 ---
 
@@ -247,7 +349,9 @@ out/Blog Images - {article_title}/
 
 ## Filename sanitization
 
-Pattern for article images: `AskRoss.ca - {sanitized_h2_text}.png`
+Pattern for article images: `AskRoss.ca - {n} - {sanitized_h2_text}.png`
+
+Where `{n}` is the 1-based sequential position of the H2 in the article (as they appear top-to-bottom, matching the article's jump-to-section order).
 
 Sanitize H2 text:
 - Remove trailing `?` and `!`
@@ -256,6 +360,43 @@ Sanitize H2 text:
 - Remove `"`, `*`, `\`, `/`, `<`, `>`, `|`
 - Strip leading/trailing whitespace
 - Preserve apostrophes
+
+Examples:
+- `AskRoss.ca - 1 - What is actually happening to Canadian homeowners right now.png`
+- `AskRoss.ca - 8 - Advice from Ross Taylor Mortgages_ Knowing when it's time to sell your home.png`
+- `AskRoss.ca - 9 - List of all FAQs_ Canadian homeowners who can't afford their renewal or refinance.png`
+
+---
+
+## JPEG conversion — final step for every deliverable (locked in 2026-05-22)
+
+**All composited outputs are saved as PNG during pipeline execution.** After the final selection folder is confirmed, convert the entire folder to JPEG as the last standardization step.
+
+**Rule:** PNG = working/archival format. JPEG = delivery format. Both are kept.
+
+**Standard quality:** 95 (visually lossless at web display sizes, significantly smaller files than PNG).
+
+**Implementation — call once after final selection is ready:**
+```python
+from src.compositors.shared import convert_folder_to_jpeg
+
+convert_folder_to_jpeg(
+    src_dir="out/final selection",
+    dst_dir="out/final selection - JPEG",
+    quality=95,
+)
+```
+
+**Output folder naming convention:** `{folder name} - JPEG/` alongside the PNG folder. Mirrors the exact same subfolder structure (including GMB subfolder).
+
+**Applies to all image types:**
+| Image type | PNG kept | JPEG copy |
+|---|---|---|
+| Large Article Images (1920×1080) | ✓ | ✓ |
+| Feature Image (700×450) | ✓ | ✓ |
+| Desktop Banner (1286×300) | ✓ | ✓ |
+| Mobile Banner (400×600) | ✓ | ✓ |
+| GMB Share Images (1200×900) | ✓ | ✓ |
 
 ---
 
@@ -266,6 +407,7 @@ Sanitize H2 text:
 | Desktop banner (1286×300) | ❌ NEVER | Photo-only intentional design |
 | Mobile banner (400×600) | ❌ NEVER | Photo-only intentional design |
 | Bottom-line (1920×1080) | ❌ NEVER | Logo-only closer, no text |
+| FAQ image (1920×1080) | ❌ NEVER | Fixed pool image, no overlay, no text — copy + rename only |
 | Feature Background RAW | ❌ NEVER | This is the clean reusable background |
 
 ---
@@ -277,6 +419,61 @@ Use these solid colors for Phase 1 testing (no API calls):
 - Feature / banner / GMB backgrounds: `Image.new("RGB", (1920, 1080), (70, 80, 95))`
 
 The solid color must be dark enough that white text is visible. Use a neutral dark blue-gray.
+
+---
+
+## Image generation rules — learned from testing (2026-05-21)
+
+### Scene mode selection (for Gemini / AI generation)
+Pick ONE mode per section. Reference: `prompt-builder.md`.
+- **OBJECT mode** — most reliable. Use for: equity, renewals, credit score, waiting/time, financial reset (object/still-life in frame, no people). Concept reads clearly, no overdramatic faces.
+- **PEOPLE mode** — use when human story matters. Rules: subjects must look at each other or at documents — NEVER head-on into the camera lens. Medium shot with both heads fully in frame. Not movie-poster dramatic.
+- **PLACE mode** — use for institutional or location-driven topics. Building/house as hero.
+
+### What works
+- Object still-life prompts (house model + piggy bank, hourglass on calendar, renewal letter) — clear, uncluttered, concept reads at a glance
+- Canadian home exterior when article is about selling — contextually obvious, no over-dramatization
+- Couples looking at documents/tablets (NOT at camera) — natural, warm, editorial feel
+
+### What never works
+- Person staring directly at the camera — always looks overdramatic and AI-generated
+- Readable text or signage baked into the AI-generated image — violates brand and looks unpolished
+- Autumn/fall foliage when article publishes in spring or summer — always check current season
+- Compound Pexels search strings (4+ descriptors) — return irrelevant or mixed results; use 3–4 words max
+
+### Prompt structure (Gemini)
+Every prompt must specify:
+1. Scene mode (OBJECT / PEOPLE / PLACE)
+2. Subject framing: "focal point on the upper-third horizontal line, occupying 35–55% of frame height"
+3. Upper-left quiet zone: "upper-left ~260×100px region must be clear — sky, blurred foliage, or plain wall"
+4. Current season foliage — never use autumn unless article publishes Sept–Nov
+5. No text/logos/watermarks in generated image
+6. Avoidance tail: cropped heads, face staring at camera, excessive sky, fall foliage, plastic skin, distorted hands, 3D render style
+
+### Selling articles — feature/banner/GMB/bottom-line background
+- **Never fetch from Pexels** — stock "for sale" images don't match brand
+- **Always use prebuilt pool:** `references/BLOG POST - Large Article Images for Askross.ca/Reusable Image Large Article Image Assets/home for sale options/` (8 options)
+- Pick randomly from pool. Applies to feature image, desktop banner, mobile banner, all GMB cities, and bottom-line
+
+**Pool image selection guide (learned 2026-05-21):**
+| File | Description | Best for |
+|---|---|---|
+| `home for sale.png` | FOR SALE sign as hero, large/prominent, house blurred, spring foliage, no family | Feature, banner, GMB — sign is always in frame |
+| `home for sale (2).png` | FOR SALE sign right side, wooded background, no family | Banner alternative |
+| `home for sale (3).png` | Family from behind, sign on edge | **AVOID for banner** — sign gets cut off in 1286×300 crop |
+| `home for sale (4).png` | FOR SALE sign + house, overcast sky, no family | Acceptable |
+| `home for sale (5).png` | Wooden blocks spelling SALE + house model | Conceptual only |
+| `home for sale (6).png` | Family celebrating, SOLD + sign | Editorial/emotional |
+| `home for sale (7).png` | FOR SALE sign + house both prominent, no family, blue sky | Feature, banner, GMB — good clean alternative |
+| `home for sale (8).png` | FOR SALE sign + house, no family | Acceptable |
+
+**Recommended defaults:** Pool 1 (`home for sale.png`) or Pool 7 (`home for sale (7).png`) for any format where the sign must be clearly visible.
+
+### Pexels search term rules
+- 3–4 words maximum
+- Match the core object or scene, not a description of mood
+- Good: `hourglass calendar time`, `mortgage renewal letter`, `credit score laptop`
+- Bad: `calendar waiting financial uncertainty home`, `credit score financial improvement laptop`
 
 ---
 
@@ -297,4 +494,140 @@ response = requests.post(
 
 API key: `OPENROUTER_IMAGE_API_KEY` from `.env` in working directory root.
 
+**`.env` location:** The `.env` is NOT in the working directory root — it lives at:
+```
+references/(2) Newsletter Image Creation - Use for process creation reference/.env
+```
+The `_load_env()` function in `generate_gemini.py` handles this fallback automatically. Always call `_load_env()` (not bare `load_dotenv`) in any script that needs API keys.
+
 Generate 2 candidates per section in Phase 2. Present both. User picks best.
+
+---
+
+## Full session workflow (locked in 2026-05-21)
+
+This is the complete end-to-end process for creating blog article images for one article.
+
+### Step 1 — Prepare manifest
+Create `out/manifest.json`:
+```json
+{
+  "title": "Article Title Here",
+  "slug": "article-title-here",
+  "title_line_count": 2,
+  "theme_label": "Housing News",
+  "gmb_locations": ["Toronto", "Ottawa", "Richmond Hill", "Mississauga"],
+  "h2_sections": [
+    {
+      "text": "H2 section title",
+      "section_number": 2,
+      "filename": "AskRoss.ca - 1 - H2 section title.png",
+      "is_bottom_line": false,
+      "is_faq": false,
+      "prompt_hint": "Visual description for image generation"
+    }
+  ]
+}
+```
+- `section_number` = the heading number in the article (H1=1, first H2=2, etc.)
+- `filename` uses sequential 1-based index: `AskRoss.ca - 1 - ...`, `AskRoss.ca - 2 - ...`
+- Last regular section before FAQ is always `is_bottom_line: true`
+- FAQ section is always `is_faq: true`
+
+### Step 2 — Generate backgrounds
+**For selling articles** ("sell", "selling", "for sale" in title):
+- Feature/banner/GMB/bottom-line backgrounds → use home for sale pool (Pool 1 or Pool 7 recommended)
+- Article section backgrounds → run Pexels or Gemini as normal
+
+**For all other articles:**
+```bash
+python generate_gemini.py   # AI generation via Gemini 2.5 Flash
+# OR
+python generate_phase2.py   # Pexels stock photos
+```
+Raw backgrounds saved to `out/generated/`.
+
+### Step 3 — Review outputs
+In the output folder (`out/Blog Images - .../BLOG POST - Large Article Images.../`):
+- Create three subfolders: `good/`, `close but not/`, `no/`
+- Sort each image into the right folder by visual inspection
+- Criteria for **good**: correct subject matter, 2-line title fits well, no AI artifacts, background suits the section topic
+- Criteria for **close but not**: right concept but wrong framing, title wraps to 3 lines, sign cut off
+- Criteria for **no**: wrong subject entirely, overdramatic, wrong season, face staring at camera
+
+### Step 4 — Compile BEST folder
+Create `out/BEST - {article_title}/` and recomposite the selected backgrounds:
+```python
+# Apply alternating positions (0-indexed regular sections):
+positions = ["lower-left", "center", "lower-left", "center", ...]
+for i, section in enumerate(regular_sections):
+    compose_article_image(
+        h2_text=section["text"],
+        background=Image.open(chosen_bg),
+        overlay_path=article_overlay,
+        font_path=font_archivo,
+        out_path=out_path,
+        force_position=positions[i],
+    )
+```
+- Bottom-line: apply bottom-line overlay (no text)
+- FAQ: copy from pool, resize, no overlay, no text
+
+### Step 5 — Fine-tune
+Review BEST folder and apply targeted fixes:
+- Title position wrong → recomposite with different `force_position`
+- Title Y off → recomposite with `text_y + 5` (common for center position)
+- Background wrong → regenerate just that section
+- Alternative needed → generate ALT file (keep original, add ALT suffix to filename)
+
+### Step 6 — Feature, Banner, GMB
+**For selling articles:** Use Pool 1 or Pool 7 as background.
+```python
+# Banner crop — use red pixel detection for Pool 1/7:
+# (see Banner section above for full code snippet)
+# Pool 1 approved values: banner top=239, mobile left=566
+
+compose_feature_image(title, theme_label, background=pool_bg, ...)
+compose_all_banners(background=pool_bg, ...)
+compose_all_gmb_images(title, background=pool_bg, ...)
+```
+
+### Step 7 — Final selection
+Create `out/final selection/` and populate:
+```
+final selection/
+├── Feature Image - {title}.png                      700×450
+├── Banner - {title}.png                             1286×300
+├── Mobile - {title}.png                             400×600
+├── AskRoss.ca - 1 - {h2}.png                        1920×1080
+├── AskRoss.ca - 2 - {h2}.png
+├── ... (all regular sections)
+├── AskRoss.ca - N - Advice from Ross Taylor Mortgages_ ...  (bottom-line)
+├── AskRoss.ca - N+1 - List of all FAQs_ ...         (FAQ)
+├── AskRoss.ca - X ALT WARNING - {h2}.png            (any approved alternates)
+└── BLOG RESHARE - GMB - POST ONLY- IMAGES TEMPLATE/
+    ├── Toronto - {title}.png                        1200×900
+    ├── Ottawa - {title}.png
+    ├── Richmond Hill - {title}.png
+    └── Mississauga - {title}.png
+```
+
+### Step 9 — Convert final selection to JPEG
+```python
+from src.compositors.shared import convert_folder_to_jpeg
+convert_folder_to_jpeg("out/final selection", "out/final selection - JPEG", quality=95)
+```
+This is always the last step. PNG folder = archival. JPEG folder = delivery to client / upload.
+
+### Step 8 — Archive and clean up
+```
+out/
+├── final selection/         ← deliverable
+├── generated/               ← keep (raw backgrounds, reusable)
+├── manifest.json            ← keep
+└── _archive/                ← move everything else here
+    ├── Blog Images - {title}/
+    ├── Blog Images - AI Generated - {title}/
+    ├── BEST - {title}/
+    └── test-output/
+```

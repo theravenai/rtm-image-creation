@@ -39,18 +39,18 @@ def slugify(text: str) -> str:
     return text
 
 
-def sanitize_filename(h2_text: str) -> str:
+def sanitize_filename(h2_text: str, index: int = None) -> str:
     """Sanitize an H2 heading for use in a filename.
 
-    Rules:
-      - Remove trailing ? and !
-      - Replace ': ' with '_ '
-      - Remove ", *, /, \\, <, >
+    Format: AskRoss.ca - {index} - {text}.png
+    The index is the 1-based position of the section in the article.
     """
     text = h2_text.rstrip("?!")
     text = text.replace(": ", "_ ")
     for ch in ['"', "*", "/", "\\", "<", ">"]:
         text = text.replace(ch, "")
+    if index is not None:
+        return f"AskRoss.ca - {index} - {text}.png"
     return f"AskRoss.ca - {text}.png"
 
 
@@ -292,17 +292,18 @@ def parse_html_article(content: str) -> dict:
         h2_sections.append({
             "text": h2_text,
             "section_number": fig_id,
-            "filename": sanitize_filename(h2_text),
+            "filename": None,  # assigned after filtering with 1-based index
             "is_bottom_line": is_bottom_line,
             "is_faq": is_faq,
             "prompt_hint": generate_prompt_hint(h2_text),
         })
 
-    # Also catch the trailing "Ross Taylor Mortgages" H2 (the bio block) — we do NOT
-    # want that. Filter to only IDs that appeared in the nav jump list, OR keep all
-    # if nav list is empty. But to be safe also filter out any that are NOT in the nav.
     if nav_section_ids:
         h2_sections = [s for s in h2_sections if s["section_number"] in nav_section_ids]
+
+    # Assign 1-based sequential filenames after filtering
+    for i, section in enumerate(h2_sections, start=1):
+        section["filename"] = sanitize_filename(section["text"], index=i)
 
     return {
         "title": title,
@@ -354,8 +355,8 @@ def parse_markdown_article(content: str) -> dict:
     # Also stop at the "Metadata Elements" H2 (if present).
     h2_sections = []
     section_counter = 2  # markdown sections start numbering at 2
+    image_index = 1      # 1-based sequential index for filenames
 
-    in_content = False
     for line in lines[jump_line_idx + 1:]:
         stripped = line.strip()
 
@@ -379,12 +380,13 @@ def parse_markdown_article(content: str) -> dict:
             h2_sections.append({
                 "text": h2_text,
                 "section_number": section_counter,
-                "filename": sanitize_filename(h2_text),
+                "filename": sanitize_filename(h2_text, index=image_index),
                 "is_bottom_line": is_bottom_line,
                 "is_faq": is_faq,
                 "prompt_hint": generate_prompt_hint(h2_text),
             })
             section_counter += 1
+            image_index += 1
 
     return {
         "title": title,

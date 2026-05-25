@@ -32,13 +32,14 @@ CANVAS_W = 1200
 CANVAS_H = 900
 
 # Title text constants per RULES.md
-GMB_TEXT_X       = 237   # left margin (aligns with embedded branding)
-GMB_TEXT_Y       = 587   # below city name element (y≈544-558)
-GMB_MAX_WIDTH    = 660   # pixel-calibrated from reference sample
-GMB_LINE_HEIGHT  = 45    # measured from ground truth: line2_top - line1_top = 631-586
-GMB_START_SIZE   = 29    # pixel-calibrated: line2 pixel-perfect; line1 within PIL tolerance
-GMB_MIN_SIZE     = 18
-GMB_MAX_LINES    = 2
+GMB_TEXT_X            = 236    # left margin (aligns with embedded branding)
+GMB_TEXT_Y            = 573    # below city name element; moved up 14px from 587
+GMB_MAX_WIDTH         = 850    # widened to fit 6-word line 1 at 35px
+GMB_LINE_HEIGHT_RATIO = 1.3    # line height = font_size × 1.3
+GMB_START_SIZE        = 35     # user-specified target size
+GMB_MIN_SIZE          = 18
+GMB_MAX_LINES         = 2
+GMB_LETTER_SPACING    = 1      # 1px between each character
 
 GMB_CITIES = ["Toronto", "Ottawa", "Richmond Hill", "Mississauga"]
 
@@ -65,7 +66,7 @@ def compose_gmb_image(
     # 2. Apply city overlay (embeds logo, brand text, red bar, city name)
     canvas = apply_overlay(canvas, overlay_path)
 
-    # 3. Auto-fit Archivo Black for title (ALL CAPS per brand spec)
+    # 3. Auto-fit Open Sans Bold for title (ALL CAPS per brand spec)
     title_upper = title.upper()
     font, lines = fit_font_size(
         text=title_upper,
@@ -74,9 +75,11 @@ def compose_gmb_image(
         max_lines=GMB_MAX_LINES,
         start_size=GMB_START_SIZE,
         min_size=GMB_MIN_SIZE,
+        letter_spacing=GMB_LETTER_SPACING,
     )
-    lines = prevent_widow(lines, font, GMB_MAX_WIDTH)
-    print(f"    Title: {len(lines)} lines at {font.size}px")
+    lines = prevent_widow(lines, font, GMB_MAX_WIDTH, GMB_LETTER_SPACING)
+    line_height = int(font.size * GMB_LINE_HEIGHT_RATIO)
+    print(f"    Title: {len(lines)} lines at {font.size}px, line_height={line_height}px")
 
     # 4. Render title with drop shadow
     canvas = draw_text_with_shadow(
@@ -85,8 +88,9 @@ def compose_gmb_image(
         font=font,
         text_x=GMB_TEXT_X,
         text_y=GMB_TEXT_Y,
-        line_height=GMB_LINE_HEIGHT,
+        line_height=line_height,
         align="left",
+        letter_spacing=GMB_LETTER_SPACING,
     )
 
     # 5. Save

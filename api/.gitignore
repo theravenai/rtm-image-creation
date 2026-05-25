@@ -1,0 +1,5 @@
+storage/sessions/
+storage/assets/pool_images/
+__pycache__/
+*.pyc
+.env

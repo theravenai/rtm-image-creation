@@ -107,10 +107,13 @@ ASSET_PATHS = {
         / "ArchivoBlack-Regular.ttf"
     ),
     "font_aleo": (
-        SCRIPT_DIR / "fonts" / "Aleo" / "static" / "Aleo-SemiBold.ttf"
+        SCRIPT_DIR / "fonts" / "Aleo" / "static" / "Aleo-Bold.ttf"
     ),
     "font_opensans": (
-        SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-SemiBold.ttf"
+        SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-Regular.ttf"
+    ),
+    "font_opensans_bold": (
+        SCRIPT_DIR / "fonts" / "Open_Sans" / "static" / "OpenSans-Bold.ttf"
     ),
     # Manifest
     "manifest": SCRIPT_DIR / "out" / "manifest.json",
@@ -189,9 +192,7 @@ def run_pipeline(phase: int, output_base: str = None) -> None:
     article_title   = manifest["title"]
     title_line_count = manifest.get("title_line_count", 2)
 
-    # Build a short theme label from the article title for the feature image
-    # (first 2-3 meaningful words)
-    theme_label = _derive_theme_label(article_title)
+    theme_label = _derive_theme_label(manifest)
     print(f"  Theme label: '{theme_label}'")
 
     if output_base:
@@ -250,7 +251,7 @@ def run_pipeline(phase: int, output_base: str = None) -> None:
         overlay_2line_path=str(ASSET_PATHS["feature_overlay_2line"]),
         overlay_3line_path=str(ASSET_PATHS["feature_overlay_3line"]),
         aleo_font_path=str(ASSET_PATHS["font_aleo"]),
-        opensans_font_path=str(ASSET_PATHS["font_opensans"]),
+        opensans_font_path=str(ASSET_PATHS["font_opensans_bold"]),
         out_dir=root_dir,
         article_title_safe=safe_title,
     )
@@ -272,7 +273,7 @@ def run_pipeline(phase: int, output_base: str = None) -> None:
         title=article_title,
         background=feature_bg,
         gmb_overlay_dir=str(ASSET_PATHS["gmb_overlay_dir"]),
-        font_path=str(ASSET_PATHS["font_archivo"]),
+        font_path=str(ASSET_PATHS["font_opensans_bold"]),
         out_dir=gmb_dir,
         article_title_safe=safe_title,
         cities=gmb_cities,
@@ -302,20 +303,41 @@ def run_pipeline(phase: int, output_base: str = None) -> None:
         print("\nALL CHECKS PASSED")
 
 
-def _derive_theme_label(title: str) -> str:
-    """Extract a 2-3 word theme label from the article title.
+def _derive_theme_label(manifest: dict) -> str:
+    """Return a 2-3 word theme label for the Feature image THEME text layer.
 
-    Strips common stop words and returns the most meaningful short phrase.
-    Used for the Feature image THEME text layer (Aleo SemiBold).
+    Process (in priority order):
+      1. Explicit manifest["theme_label"] field — always wins.
+         Set this in manifest.json when parsing the article. Recommended.
+      2. Keyword fallback — categorises by topic signal in the article title.
+
+    AskRoss.ca theme vocabulary:
+      Housing News    — selling decisions, market conditions, homeowner issues
+      Mortgage Rates  — Bank of Canada, interest rates, rate changes
+      Renewal Tips    — mortgage renewal, renewal shock, payment increases
+      Market Update   — home prices, market trends, recovery
+      Buyer's Guide   — buying, first-time buyers, purchase decisions
+      Financial Advice — credit, debt, financial planning, reset
+      Refinancing     — refinance options, equity, HELOC
     """
-    stop = {"a", "an", "the", "is", "are", "was", "were", "to", "for", "of",
-            "in", "on", "at", "by", "and", "or", "but", "you", "your", "my",
-            "it", "its", "do", "does", "how", "why", "what", "when", "where",
-            "will", "can", "could", "should", "would", "before", "after",
-            "things", "actually", "get", "worse", "that"}
-    words = [w.strip("?!.,:'\"").title() for w in title.split()]
-    meaningful = [w for w in words if w.lower() not in stop and len(w) > 2]
-    return " ".join(meaningful[:3]) if meaningful else title.split()[0]
+    if manifest.get("theme_label"):
+        return manifest["theme_label"]
+
+    title = manifest.get("title", "").lower()
+
+    if any(k in title for k in ("bank of canada", "interest rate", "rate cut", "rate hike")):
+        return "Mortgage Rates"
+    if any(k in title for k in ("renew", "renewal", "payment shock")):
+        return "Renewal Tips"
+    if any(k in title for k in ("refinanc", "heloc", "equity")):
+        return "Refinancing"
+    if any(k in title for k in ("buy", "buyer", "first-time", "purchase")):
+        return "Buyer's Guide"
+    if any(k in title for k in ("credit", "debt", "financial reset", "budget")):
+        return "Financial Advice"
+    if any(k in title for k in ("market", "home price", "recovery", "crash")):
+        return "Market Update"
+    return "Housing News"
 
 
 # ---------------------------------------------------------------------------

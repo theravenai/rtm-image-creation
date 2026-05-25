@@ -2,6 +2,7 @@
   "title": "Should You Sell Your Home Before Things Get Worse?",
   "slug": "should-you-sell-your-home-before-things-get-worse",
   "title_line_count": 2,
+  "theme_label": "Housing News",
   "gmb_locations": [
     "Toronto",
     "Ottawa",
@@ -12,7 +13,7 @@
     {
       "text": "What is actually happening to Canadian homeowners right now?",
       "section_number": 2,
-      "filename": "AskRoss.ca - What is actually happening to Canadian homeowners right now.png",
+      "filename": "AskRoss.ca - 1 - What is actually happening to Canadian homeowners right now.png",
       "is_bottom_line": false,
       "is_faq": false,
       "prompt_hint": "A montage of a declining home-price chart, a worried Canadian family, and a stack of renewal notices on a kitchen counter, muted newsprint colour palette."
@@ -20,7 +21,7 @@
     {
       "text": "How are mortgage renewals making this worse?",
       "section_number": 3,
-      "filename": "AskRoss.ca - How are mortgage renewals making this worse.png",
+      "filename": "AskRoss.ca - 2 - How are mortgage renewals making this worse.png",
       "is_bottom_line": false,
       "is_faq": false,
       "prompt_hint": "A kitchen table covered in stacked bills and a calendar with a renewal date circled in red, a Canadian couple looking worried, overhead lighting casting shadows."
@@ -28,7 +29,7 @@
     {
       "text": "What happens when your equity disappears?",
       "section_number": 4,
-      "filename": "AskRoss.ca - What happens when your equity disappears.png",
+      "filename": "AskRoss.ca - 3 - What happens when your equity disappears.png",
       "is_bottom_line": false,
       "is_faq": false,
       "prompt_hint": "A model house sinking into a pile of sand, an empty piggy bank beside it, muted tones suggesting financial loss, neutral studio background."
@@ -36,7 +37,7 @@
     {
       "text": "What are the warning signs that you're heading toward a forced sale?",
       "section_number": 5,
-      "filename": "AskRoss.ca - What are the warning signs that you're heading toward a forced sale.png",
+      "filename": "AskRoss.ca - 4 - What are the warning signs that you're heading toward a forced sale.png",
       "is_bottom_line": false,
       "is_faq": false,
       "prompt_hint": "A visibly stressed Canadian homeowner holding an overdue mortgage notice, red warning flags visible in the background, serious and urgent expression."
@@ -44,7 +45,7 @@
     {
       "text": "Why is waiting for the market to recover a risky strategy?",
       "section_number": 6,
-      "filename": "AskRoss.ca - Why is waiting for the market to recover a risky strategy.png",
+      "filename": "AskRoss.ca - 5 - Why is waiting for the market to recover a risky strategy.png",
       "is_bottom_line": false,
       "is_faq": false,
       "prompt_hint": "A calendar with months being crossed off while a home-price chart stays flat, a Canadian homeowner sitting on a couch looking at phone bills accumulating on the coffee table."
@@ -52,7 +53,7 @@
     {
       "text": "How does selling your home actually affect your credit?",
       "section_number": 7,
-      "filename": "AskRoss.ca - How does selling your home actually affect your credit.png",
+      "filename": "AskRoss.ca - 6 - How does selling your home actually affect your credit.png",
       "is_bottom_line": false,
       "is_faq": false,
       "prompt_hint": "A clean credit score meter jumping from the red zone to green after a successful home sale, a Canadian homeowner's relieved face reflected in a laptop screen."
@@ -60,7 +61,7 @@
     {
       "text": "What does a financial reset actually look like?",
       "section_number": 8,
-      "filename": "AskRoss.ca - What does a financial reset actually look like.png",
+      "filename": "AskRoss.ca - 7 - What does a financial reset actually look like.png",
       "is_bottom_line": false,
       "is_faq": false,
       "prompt_hint": "A clean modern desk with a fresh notepad, a sunrise through a window, a Canadian couple reviewing a new budget plan with an optimistic fresh-start mood."
@@ -68,7 +69,7 @@
     {
       "text": "Advice from Ross Taylor Mortgages: Knowing when it's time to sell your home",
       "section_number": 9,
-      "filename": "AskRoss.ca - Advice from Ross Taylor Mortgages_ Knowing when it's time to sell your home.png",
+      "filename": "AskRoss.ca - 8 - Advice from Ross Taylor Mortgages_ Knowing when it's time to sell your home.png",
       "is_bottom_line": true,
       "is_faq": false,
       "prompt_hint": "A friendly Canadian mortgage advisor speaking directly to the camera in a modern Toronto office, notepad and laptop open, warm professional lighting."
@@ -76,7 +77,7 @@
     {
       "text": "List of all FAQs: Canadian homeowners who can't afford their renewal or refinance",
       "section_number": 10,
-      "filename": "AskRoss.ca - List of all FAQs_ Canadian homeowners who can't afford their renewal or refinance.png",
+      "filename": "AskRoss.ca - 9 - List of all FAQs_ Canadian homeowners who can't afford their renewal or refinance.png",
       "is_bottom_line": false,
       "is_faq": true,
       "prompt_hint": "A clean split-screen infographic showing common mortgage questions on one side and concise answers on the other, Canadian flag subtly visible in the background."

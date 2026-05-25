@@ -54,15 +54,30 @@ def apply_overlay(canvas: Image.Image, overlay_path: str) -> Image.Image:
 # Text wrapping
 # ---------------------------------------------------------------------------
 
-def wrap_text(text: str, font: ImageFont.FreeTypeFont, max_width: int) -> list:
+def _text_width(text: str, font: ImageFont.FreeTypeFont, letter_spacing: int = 0) -> int:
+    """Measure rendered width of text, accounting for optional letter spacing."""
+    if letter_spacing == 0:
+        bb = font.getbbox(text)
+        return bb[2] - bb[0]
+    return (
+        sum(font.getbbox(c)[2] - font.getbbox(c)[0] for c in text)
+        + letter_spacing * (len(text) - 1)
+    )
+
+
+def wrap_text(
+    text: str,
+    font: ImageFont.FreeTypeFont,
+    max_width: int,
+    letter_spacing: int = 0,
+) -> list:
     """Word-wrap text to fit within max_width pixels. Returns list of lines."""
     words = text.split()
     lines = []
     current = []
     for word in words:
         trial = " ".join(current + [word])
-        bb = font.getbbox(trial)
-        if bb[2] - bb[0] <= max_width:
+        if _text_width(trial, font, letter_spacing) <= max_width:
             current.append(word)
         else:
             if current:
@@ -84,6 +99,7 @@ def fit_font_size(
     max_lines: int = 3,
     start_size: int = 28,
     min_size: int = 12,
+    letter_spacing: int = 0,
 ) -> tuple:
     """Reduce font size until text wraps to at most max_lines within max_width.
 
@@ -91,15 +107,20 @@ def fit_font_size(
     """
     for size in range(start_size, min_size - 1, -1):
         font = ImageFont.truetype(font_path, size)
-        lines = wrap_text(text, font, max_width)
+        lines = wrap_text(text, font, max_width, letter_spacing)
         if len(lines) <= max_lines:
             return font, lines
     font = ImageFont.truetype(font_path, min_size)
-    lines = wrap_text(text, font, max_width)
+    lines = wrap_text(text, font, max_width, letter_spacing)
     return font, lines
 
 
-def prevent_widow(lines: list, font: ImageFont.FreeTypeFont, max_width: int) -> list:
+def prevent_widow(
+    lines: list,
+    font: ImageFont.FreeTypeFont,
+    max_width: int,
+    letter_spacing: int = 0,
+) -> list:
     """Move one word from the penultimate line to the last line if the last line
     has only one word (typographic widow prevention).
 
@@ -116,8 +137,7 @@ def prevent_widow(lines: list, font: ImageFont.FreeTypeFont, max_width: int) -> 
     moved = prev_words[-1]
     new_prev = " ".join(prev_words[:-1])
     new_last = moved + " " + lines[-1]
-    bb = font.getbbox(new_last)
-    if bb[2] - bb[0] <= max_width:
+    if _text_width(new_last, font, letter_spacing) <= max_width:
         return lines[:-2] + [new_prev, new_last]
     return lines
 
@@ -125,6 +145,14 @@ def prevent_widow(lines: list, font: ImageFont.FreeTypeFont, max_width: int) -> 
 # ---------------------------------------------------------------------------
 # Text rendering with drop shadow
 # ---------------------------------------------------------------------------
+
+def _draw_spaced(draw, x, y, text, font, fill, letter_spacing):
+    """Render text char-by-char to apply letter spacing."""
+    cx = x
+    for char in text:
+        draw.text((cx, y), char, font=font, fill=fill)
+        cx += font.getbbox(char)[2] - font.getbbox(char)[0] + letter_spacing
+
 
 def draw_text_with_shadow(
     canvas: Image.Image,
@@ -138,17 +166,19 @@ def draw_text_with_shadow(
     shadow_offset: int = SHADOW_OFFSET,
     shadow_blur: int = SHADOW_BLUR,
     shadow_opacity: int = SHADOW_OPACITY,
+    letter_spacing: int = 0,
 ) -> Image.Image:
     """Draw pre-wrapped lines with drop shadow on canvas. Returns RGBA image.
 
     Args:
-        canvas:     RGBA or RGB canvas to draw on.
-        lines:      List of text lines (already wrapped).
-        font:       FreeType font object.
-        text_x:     Left margin for left-aligned text (ignored for center).
-        text_y:     Top of first text line.
-        line_height: Pixels between line tops (font_size + leading).
-        align:      'left' or 'center'.
+        canvas:         RGBA or RGB canvas to draw on.
+        lines:          List of text lines (already wrapped).
+        font:           FreeType font object.
+        text_x:         Left margin for left-aligned text (ignored for center).
+        text_y:         Top of first text line.
+        line_height:    Pixels between line tops (font_size + leading).
+        align:          'left' or 'center'.
+        letter_spacing: Extra pixels between each character (0 = default kerning).
     """
     canvas_w, canvas_h = canvas.size
 
@@ -157,17 +187,16 @@ def draw_text_with_shadow(
 
     for i, line in enumerate(lines):
         ly = text_y + i * line_height
-        if align == "center":
-            bb = font.getbbox(line)
-            lx = (canvas_w - (bb[2] - bb[0])) // 2
+        lw = _text_width(line, font, letter_spacing)
+        lx = (canvas_w - lw) // 2 if align == "center" else text_x
+        if letter_spacing > 0:
+            _draw_spaced(shadow_draw, lx + shadow_offset, ly + shadow_offset,
+                         line, font, (0, 0, 0, shadow_opacity), letter_spacing)
         else:
-            lx = text_x
-        shadow_draw.text(
-            (lx + shadow_offset, ly + shadow_offset),
-            line,
-            font=font,
-            fill=(0, 0, 0, shadow_opacity),
-        )
+            shadow_draw.text(
+                (lx + shadow_offset, ly + shadow_offset),
+                line, font=font, fill=(0, 0, 0, shadow_opacity),
+            )
 
     shadow_layer = shadow_layer.filter(ImageFilter.GaussianBlur(radius=shadow_blur))
 
@@ -175,12 +204,12 @@ def draw_text_with_shadow(
     text_draw = ImageDraw.Draw(result)
     for i, line in enumerate(lines):
         ly = text_y + i * line_height
-        if align == "center":
-            bb = font.getbbox(line)
-            lx = (canvas_w - (bb[2] - bb[0])) // 2
+        lw = _text_width(line, font, letter_spacing)
+        lx = (canvas_w - lw) // 2 if align == "center" else text_x
+        if letter_spacing > 0:
+            _draw_spaced(text_draw, lx, ly, line, font, text_color, letter_spacing)
         else:
-            lx = text_x
-        text_draw.text((lx, ly), line, font=font, fill=text_color)
+            text_draw.text((lx, ly), line, font=font, fill=text_color)
 
     return result
 
@@ -251,6 +280,32 @@ def save_rgb(img: Image.Image, path: str) -> None:
         img = bg
     img.save(path, "PNG", optimize=True)
     print(f"  Saved: {os.path.basename(path)} ({img.width}x{img.height})")
+
+
+def save_jpeg(img: Image.Image, path: str, quality: int = 95):
+    """Flatten RGBA to RGB and save as JPEG. Creates parent dirs."""
+    os.makedirs(os.path.dirname(os.path.abspath(path)), exist_ok=True)
+    if img.mode == "RGBA":
+        bg = Image.new("RGB", img.size, (0, 0, 0))
+        bg.paste(img, mask=img.split()[3])
+        img = bg
+    img.save(path, "JPEG", quality=quality, optimize=True)
+    print(f"  Saved: {os.path.basename(path)} ({img.width}x{img.height})")
+
+
+def convert_folder_to_jpeg(src_dir: str, dst_dir: str, quality: int = 95):
+    """Convert all PNGs in src_dir (recursively) to JPEG in dst_dir, preserving structure."""
+    from pathlib import Path
+    src = Path(src_dir)
+    dst = Path(dst_dir)
+    count = 0
+    for src_file in sorted(src.rglob("*.png")):
+        rel      = src_file.relative_to(src)
+        dst_file = dst / rel.with_suffix(".jpg")
+        dst_file.parent.mkdir(parents=True, exist_ok=True)
+        Image.open(src_file).convert("RGB").save(dst_file, "JPEG", quality=quality, optimize=True)
+        count += 1
+    print(f"  JPEG conversion: {count} files → {dst_dir}")
 
 
 def verify_dimensions(path: str, expected_w: int, expected_h: int) -> bool:

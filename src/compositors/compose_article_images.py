@@ -33,8 +33,8 @@ CANVAS_H = 1080
 FONT_SIZE          = 60
 TEXT_LINE_HEIGHT   = 75    # 60px font + 15px leading
 TEXT_LEFT_MARGIN   = 227   # just right of logo box (logo spans x=24-217)
-TEXT_MAX_WIDTH_LEFT   = 1400  # upper-left and lower-left positions
-TEXT_MAX_WIDTH_CENTER = 1500  # center position
+TEXT_MAX_WIDTH_LEFT   = 1300  # upper-left and lower-left — wide enough for 2-line wrapping on most titles
+TEXT_MAX_WIDTH_CENTER = 1400  # center — wide enough for 2-line wrapping on most titles
 
 # Y positions per RULES.md
 UPPER_LEFT_Y          = 284
@@ -57,9 +57,9 @@ def _center_y(num_lines: int = 2) -> int:
     return (CANVAS_H - num_lines * TEXT_LINE_HEIGHT) // 2
 
 
-def _render_title(canvas: Image.Image, h2_text: str, font_path: str) -> Image.Image:
-    """Run luminance analysis, wrap text, render with shadow. Returns RGBA canvas."""
-    position  = auto_text_position(canvas)
+def _render_title(canvas: Image.Image, h2_text: str, font_path: str, force_position: str = None) -> Image.Image:
+    """Run luminance analysis (or use force_position), wrap text, render with shadow."""
+    position  = force_position if force_position else auto_text_position(canvas)
     font      = ImageFont.truetype(font_path, FONT_SIZE)
 
     if position == "center":
@@ -99,13 +99,17 @@ def compose_article_image(
     overlay_path: str,
     font_path: str,
     out_path: str,
+    force_position: str = None,
 ) -> bool:
-    """Build a single 1920x1080 article image with text and overlay."""
+    """Build a single 1920x1080 article image with text and overlay.
+
+    force_position: 'upper-left', 'lower-left', or 'center'. If None, uses luminance analysis.
+    """
     print(f"\n  Article image: {os.path.basename(out_path)}")
 
     canvas = resize_and_center_crop(background, CANVAS_W, CANVAS_H)
     canvas = apply_overlay(canvas, overlay_path)
-    canvas = _render_title(canvas, h2_text, font_path)
+    canvas = _render_title(canvas, h2_text, font_path, force_position=force_position)
 
     save_rgb(canvas, out_path)
     return verify_dimensions(out_path, CANVAS_W, CANVAS_H)
@@ -131,13 +135,10 @@ def compose_bottom_line_image(
 
 
 def compose_faq_image(
-    h2_text: str,
     faq_pool_pattern: str,
-    overlay_path: str,
-    font_path: str,
     out_path: str,
 ) -> bool:
-    """Build FAQ image: reusable bg + standard overlay + title text."""
+    """Pick a FAQ pool image, resize to 1920x1080, save. No overlay, no text — ever."""
     print(f"\n  FAQ image: {os.path.basename(out_path)}")
 
     bg_path = _pick_random_from_pool(faq_pool_pattern)
@@ -145,8 +146,7 @@ def compose_faq_image(
     background = Image.open(bg_path).convert("RGB")
 
     canvas = resize_and_center_crop(background, CANVAS_W, CANVAS_H)
-    canvas = apply_overlay(canvas, overlay_path)
-    canvas = _render_title(canvas, h2_text, font_path)
+    # No overlay, no text — pool images are the complete deliverable
 
     save_rgb(canvas, out_path)
     return verify_dimensions(out_path, CANVAS_W, CANVAS_H)
@@ -179,10 +179,7 @@ def compose_all_article_images(
             )
         elif section["is_faq"]:
             ok = compose_faq_image(
-                h2_text=text,
                 faq_pool_pattern=faq_pool_pattern,
-                overlay_path=article_overlay_path,
-                font_path=font_path,
                 out_path=out_path,
             )
         else:
